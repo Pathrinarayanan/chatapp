@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,9 +22,10 @@ import com.google.firebase.auth.FirebaseUser;
 
 
 public class LoginActivity extends AppCompatActivity {
-    EditText lEmail,lPassword;
+    TextInputEditText lEmail,lPassword;
     Button loginNow,lgm;
-    TextView forgetPass,createAcc;
+    TextView forgetPass;
+    ImageView createAcc;
     FirebaseAuth fAuth;
     FirebaseUser user;
 
@@ -34,13 +36,13 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login2);
 
-        lEmail = findViewById(R.id.Emails);
-        lPassword = findViewById(R.id.lPassword);
-        loginNow = findViewById(R.id.loginButton);
+        lEmail = findViewById(R.id.loginemails);
+        lPassword = findViewById(R.id.Loginpasswords);
+        loginNow = findViewById(R.id.LoginButton);
 
 
         forgetPass = findViewById(R.id.forgotPassword);
-        createAcc = findViewById(R.id.createAccount);
+        createAcc = findViewById(R.id.login_back_button);
         user = FirebaseAuth.getInstance().getCurrentUser();
 
         fAuth = FirebaseAuth.getInstance();
@@ -55,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
         createAcc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, com.example.chatapp.RegisterActivity.class);
+                Intent intent = new Intent(LoginActivity.this, com.example.chatapp.welcome.class);
                 startActivity(intent);
             }
         });

@@ -21,6 +21,12 @@
     <string name="welcome_back">Welcome Back!</string>
     <string name="we_re_so_exicted_to_see_you_again">We’re so exicted to see you again!</string>
     <string name="login">LOGIN</string>
+    <string name="next">NEXT</string>
+    <string name="type">Type...</string>
+    <string name="verify">Verification</string>
+    <string name="emailentry">Enter Email</string>
+    <string name="emails">Email.....</string>
     <string name="forgot_password">Forgot Password ?</string>
     <string name="xrosstalk">Xrosstalk</string>
+
 </resources>

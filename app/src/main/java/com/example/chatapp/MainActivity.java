@@ -47,9 +47,10 @@ public class MainActivity extends AppCompatActivity {
         ViewPager viewpager = findViewById(R.id.viewPager);
 
         ViewpageAdapter viewpageAdapter = new ViewpageAdapter(getSupportFragmentManager());
-        viewpageAdapter.addFragements(new chatsFragment(),"Chats");
         viewpageAdapter.addFragements(new UserFragments(),"Users");
-        viewpageAdapter.addFragements(new ProfileFragments(),"Profile");
+        viewpageAdapter.addFragements(new chatsFragment(),"Chats");
+
+        viewpageAdapter.addFragements(new ProfileFragments(),"Notification");
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");

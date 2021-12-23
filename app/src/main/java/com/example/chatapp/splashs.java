@@ -22,7 +22,7 @@ public class splashs extends AppCompatActivity {
                     sleep(3000);
 
                     //start new activity
-                    Intent i=new Intent(splashs.this, com.example.chatapp.LoginActivity.class);
+                    Intent i=new Intent(splashs.this, com.example.chatapp.welcome.class);
                     startActivity(i);
 
                     //destroying Splash activity

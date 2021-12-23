@@ -3,12 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/drawable/back_button_24.xml" value="0.20260416666666667" />
+        <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/drawable/group_556.xml" value="0.24461538461538462" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/font/montserrat.xml" value="0.1" />
-        <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/activity_login2.xml" value="0.23229166666666667" />
+        <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/activity_login2.xml" value="0.264" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/activity_main.xml" value="0.2" />
-        <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/activity_register.xml" value="0.23229166666666667" />
+        <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/activity_register.xml" value="0.1794871794871795" />
+        <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/activity_register2.xml" value="0.2357142857142857" />
+        <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/activity_register3.xml" value="0.264" />
+        <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/activity_register4.xml" value="0.15677083333333333" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/activity_splashs.xml" value="0.2287179487179487" />
+        <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/activity_welcome.xml" value="0.16944444444444445" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/barlayout.xml" value="0.1359375" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/chat_item_left.xml" value="0.128125" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/chat_item_right.xml" value="0.128125" />
