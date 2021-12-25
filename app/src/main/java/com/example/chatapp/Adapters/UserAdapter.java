@@ -2,22 +2,22 @@ package com.example.chatapp.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-
+import com.example.chatapp.Adapters.OnItemClick;
 import com.example.chatapp.Model.Chats;
 import com.example.chatapp.Model.Users;
 import com.example.chatapp.R;
-import com.example.chatapp.messageActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -28,200 +28,143 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
+public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
+
+    private Context mContext;
+    private List<Users> mUsers;
+    private boolean ischat;
+    private OnItemClick onItemClick;
+
+    Typeface MR,MRR;
+    String theLastMessage;
+
+    public UserAdapter(Context mContext, OnItemClick onItemClick, List<Users> mUsers, boolean ischat){
+        this.onItemClick = onItemClick;
+        this.mUsers = mUsers;
+        this.mContext = mContext;
+        this.ischat = ischat;
 
 
-public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyHolder> {
 
-    Context context;
-    List<Users> userlist;
-    boolean isChat;
-
-    String friendid;
-    String thelastmessage;
-    FirebaseUser firebaseUser;
-
-    public UserAdapter(Context context, List<Users> userlist, boolean isChat) {
-        this.context = context;
-        this.userlist = userlist;
-        this.isChat = isChat;
     }
 
     @NonNull
     @Override
-    public MyHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-        View view = LayoutInflater.from(context).inflate(R.layout.layoutofusers, parent, false);
-        return new MyHolder(view);
-
-
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(mContext).inflate(R.layout.layoutofusers, parent, false);
+        return new UserAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        Users user = userlist.get(position);
-
-        friendid = user.getId();
+        final Users user = mUsers.get(position);
 
 
         holder.username.setText(user.getUsername());
-
-        if (user.getImageURL().equals("default")) {
-
-            holder.imageView.setImageResource(R.drawable.user);
-
-
+        if (user.getImageURL().equals("default")){
+            holder.profile_image.setImageResource(R.drawable.user);
         } else {
-
-            Glide.with(context).load(user.getImageURL()).into(holder.imageView);
+            Glide.with(mContext).load(user.getImageURL()).into(holder.profile_image);
         }
 
-
-        if (isChat) {
-
-            if (user.getStatus().equals("online")) {
-
-                holder.image_on.setVisibility(View.VISIBLE);
-                holder.image_off.setVisibility(View.GONE);
-
-
-            } else {
-
-                holder.image_on.setVisibility(View.GONE);
-                holder.image_off.setVisibility(View.VISIBLE);
-
-
-            }
-
-
+        if (ischat){
+            lastMessage(user.getId(), holder.last_msg);
         } else {
-
-            holder.image_on.setVisibility(View.GONE);
-            holder.image_off.setVisibility(View.GONE);
-
-
-        }
-
-        if (isChat) {
-
-            LastMessage(user.getId(), holder.last_msg);
-
-        } else {
-
             holder.last_msg.setVisibility(View.GONE);
         }
 
-
-
-    }
-
-    @Override
-    public int getItemCount() {
-        return userlist.size();
-    }
-
-    class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-
-
-        TextView username, last_msg;
-        ImageView imageView, image_on, image_off;
-
-        public MyHolder(@NonNull View itemView) {
-            super(itemView);
-
-
-            username = itemView.findViewById(R.id.username_userfrag);
-            imageView = itemView.findViewById(R.id.image_user_userfrag);
-            image_on = itemView.findViewById(R.id.image_online);
-            image_off = itemView.findViewById(R.id.image_offline);
-            last_msg = itemView.findViewById(R.id.lastMessage);
-
-            itemView.setOnClickListener(this);
-
-        }
-
-        @Override
-        public void onClick(View v) {
-
-            Users users = userlist.get(getAdapterPosition());
-
-            friendid = users.getId();
-
-            Intent intent = new Intent(context, messageActivity.class);
-            intent.putExtra("friendid", friendid);
-            context.startActivity(intent);
-
-
-
-        }
-    }
-
-    private void LastMessage(final String friendid, final TextView last_msg) {
-
-        thelastmessage = "default";
-
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Chats");
-
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                for (DataSnapshot ds: snapshot.getChildren()) {
-
-                    Chats chats = ds.getValue(Chats.class);
-
-                    if (firebaseUser!=null &&  chats!=null) {
-
-
-                        if (chats.getSender().equals(friendid) && chats.getReciever().equals(firebaseUser.getUid()) ||
-                                chats.getSender().equals(firebaseUser.getUid()) && chats.getReciever().equals(friendid)) {
-
-
-                            thelastmessage = chats.getMessage();
-                        }
-
-
-
-
-                    }
-
-                }
-
-
-                switch (thelastmessage) {
-
-
-                    case "default":
-                        last_msg.setText("No message");
-                        break;
-
-                    default:
-                        last_msg.setText(thelastmessage);
-
-                }
-
-
-                thelastmessage = "default";
-
-
+        if (ischat){
+            if (user.getStatus().equals("online")){
+                holder.img_on.setVisibility(View.VISIBLE);
+                holder.img_off.setVisibility(View.GONE);
+            } else {
+                holder.img_on.setVisibility(View.GONE);
+                holder.img_off.setVisibility(View.GONE);
             }
+        } else {
+            holder.img_on.setVisibility(View.GONE);
+            holder.img_off.setVisibility(View.GONE);
+        }
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, com.example.chatapp.messageActivity.class);
+                intent.putExtra("friendid", user.getId());
+                mContext.startActivity(intent);
             }
         });
 
 
+        holder.profile_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onItemClick.onItemCLick(user.getId(),view);
+            }
+        });
+    }
 
+    @Override
+    public int getItemCount() {
+        return mUsers.size();
+    }
 
+    public  class ViewHolder extends RecyclerView.ViewHolder{
 
+        public TextView username;
+        public ImageView profile_image;
+        private ImageView img_on;
+        private ImageView img_off;
+        private TextView last_msg;
 
+        public ViewHolder(View itemView) {
+            super(itemView);
 
+            username = itemView.findViewById(R.id.username_userfrag);
+            profile_image = itemView.findViewById(R.id.image_user_userfrag);
+            img_on = itemView.findViewById(R.id.image_online);
+            img_off = itemView.findViewById(R.id.image_offline);
+            last_msg = itemView.findViewById(R.id.lastMessage);
+        }
+    }
 
+    //check for last message
+    private void lastMessage(final String userid, final TextView last_msg){
+        theLastMessage = "default";
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Chats");
 
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Chats chat = snapshot.getValue(Chats.class);
+                    if (firebaseUser != null && chat != null) {
+                        if (chat.getReciever().equals(firebaseUser.getUid()) && chat.getSender().equals(userid) ||
+                                chat.getReciever().equals(userid) && chat.getSender().equals(firebaseUser.getUid())) {
+                            theLastMessage = chat.getMessage();
+                        }
+                    }
+                }
 
+                switch (theLastMessage){
+                    case  "default":
+                        last_msg.setText("No Message");
+                        break;
+
+                    default:
+                        last_msg.setText(theLastMessage);
+                        break;
+                }
+
+                theLastMessage = "default";
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

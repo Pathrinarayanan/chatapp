@@ -18,4 +18,9 @@
     <color name="investigator">#943C3C</color>
     <color name="enthusiast">#DC6CA7</color>
     <color name="challenger">#E54141</color>
+    <color name="grey">#4D5057</color>
+    <color name="green">#4FC18A</color>
+    <color name="black_shade">#333333</color>
+    <color name="colorPrimary">#222A35</color>
+    <color name="colorPrimaryDark">#222A35</color>
 </resources>

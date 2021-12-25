@@ -26,6 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 
 import java.util.HashMap;
+import java.util.Locale;
 
 public class Register3Activity extends AppCompatActivity {
 
@@ -120,6 +121,7 @@ public class Register3Activity extends AppCompatActivity {
                         hashMap.put("id", user.getUid());
                         hashMap.put("imageURL", "default");
                         hashMap.put("status", "offline");
+                        hashMap.put("search",username.toLowerCase());
 
 
                         reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {

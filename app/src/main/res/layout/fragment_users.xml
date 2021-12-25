@@ -3,17 +3,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="12dp"
     tools:context=".Fragments.UserFragments">
 
+    <EditText
+        android:id="@+id/search_users"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/edittext_bg"
+        android:drawableLeft="@drawable/search_bg"
+        android:drawablePadding="5dp"
+        android:hint="Search user by name..."
+        android:textColor="@color/grey"
+        android:textColorHint="@color/grey"
+        android:textCursorDrawable="@null"
+        android:textSize="16sp" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_users"
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_below="@id/search_users" />
 
-
-
+    <!-- empty state -->
+    <include
+        android:id="@+id/es_layout"
+        android:visibility="gone"
+        layout="@layout/empty_state"/>
 
 
 </RelativeLayout>
