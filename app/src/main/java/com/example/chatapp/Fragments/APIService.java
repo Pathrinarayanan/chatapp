@@ -13,7 +13,7 @@ public interface APIService {
     @Headers(
             {
                     "Content-Type:application/json",
-                    "Authorization:key=AAAAl9F2lRU:APA91bHDFG8SeBhJ7QeeLu6K-_85K5xEl-e8wg6zoOteOGKQV9sriIijl15dSMMcZlMOCTR_dc_GQeveB25Iq6IWkqT9kbkp6lvYkkK087BqnxtI3GfChR8QrhrbVOyG7FtB5auvvGKd"
+                    "Authorization:key= "             // enter your firbase key
             }
     )
 
