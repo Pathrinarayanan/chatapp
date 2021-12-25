@@ -1,13 +1,14 @@
 package com.example.chatapp.Fragments;
 
-import android.graphics.Typeface;
+import static com.firebase.ui.auth.AuthUI.getApplicationContext;
+
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -15,10 +16,12 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.chatapp.Adapters.OnItemClick;
 import com.example.chatapp.Adapters.UserAdapter;
 import com.example.chatapp.Model.Chatslist;
 import com.example.chatapp.Model.Users;
+import com.example.chatapp.Notifications.Token;
 import com.example.chatapp.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,7 +30,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
+import com.google.firebase.iid.FirebaseInstanceId;
 
 
 import java.util.ArrayList;
@@ -41,8 +44,7 @@ public class chatsFragment extends Fragment {
 
     private UserAdapter userAdapter;
     private List<Users> mUsers;
-    FrameLayout frameLayout;
-    TextView es_descp, es_title;
+    ImageView imageView;
 
     FirebaseUser fuser;
     DatabaseReference reference;
@@ -68,8 +70,7 @@ public class chatsFragment extends Fragment {
 
 
         recyclerView = view.findViewById(R.id.chat_recyclerview_chatfrag);
-
-
+        imageView = view.findViewById(R.id.image_user_userfrag);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -101,27 +102,41 @@ public class chatsFragment extends Fragment {
             }
         });
 
-        //updateToken(FirebaseInstanceId.getInstance().getToken());
+        updateToken(FirebaseInstanceId.getInstance().getToken());
 
 
         return view;
     }
 
-//    private void updateToken(String token){
-//        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Tokens");
-//        Token token1 = new Token(token);
-//        reference.child(fuser.getUid()).setValue(token1);
-//    }
+    private void updateToken(String token){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Tokens");
+        Token token1 = new Token(token);
+        reference.child(fuser.getUid()).setValue(token1);
+   }
 
     private void chatList() {
         mUsers = new ArrayList<>();
         reference = FirebaseDatabase.getInstance().getReference("Users");
         reference.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("RestrictedApi")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mUsers.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Users user = snapshot.getValue(Users.class);
+                    if(user.getImageURL() !=null) {
+                        if (user.getImageURL().equals("default")) {
+                            if (imageView != null) {
+                                imageView.setImageResource(R.drawable.user);
+                            }
+                        }
+                    }else {
+
+                            Glide.with(getApplicationContext()).load(user.getImageURL()).into(imageView);
+
+                        }
+
+
                     for (Chatslist chatlist : usersList){
                         if (user!= null && user.getId()!=null && chatlist!=null && chatlist.getId()!= null &&
                                 user.getId().equals(chatlist.getId())){

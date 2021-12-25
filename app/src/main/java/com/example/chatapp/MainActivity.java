@@ -3,6 +3,7 @@ package com.example.chatapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -91,7 +92,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() ==R.id.logout){
             FirebaseAuth.getInstance().signOut();
-            finish();
+            Intent i=new Intent(MainActivity.this, com.example.chatapp.splashs.class);
+            startActivity(i);
         }
         return super.onOptionsItemSelected(item);
     }

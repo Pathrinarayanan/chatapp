@@ -97,12 +97,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         });
 
 
-        holder.profile_image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onItemClick.onItemCLick(user.getId(),view);
-            }
-        });
+//        holder.profile_image.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if(user.getId() !=null){
+//                onItemClick.onItemCLick(user.getId(),view);
+//            }}
+//        });
     }
 
     @Override
