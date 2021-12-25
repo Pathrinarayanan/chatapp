@@ -22,7 +22,7 @@
         android:textColor="@android:color/white"
         android:textSize="18sp"
         android:layout_toRightOf="@id/chat_image"
-        android:background="@drawable/background_left"/>
+        android:background="@color/orange"/>
 
 
     <TextView

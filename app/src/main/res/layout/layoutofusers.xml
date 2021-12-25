@@ -7,10 +7,11 @@
 
 
     <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
         android:id="@+id/image_user_userfrag"
-        />
+        android:layout_width="60dp"
+        android:src="@drawable/user"
+
+        android:layout_height="50dp" />
 
 
     <TextView
@@ -26,32 +27,6 @@
         android:text="User Name"/>
 
 
-
-
-    <ImageView
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        android:id="@+id/image_online"
-        android:visibility="gone"
-        android:layout_marginLeft="-15dp"
-        android:src="@drawable/ic_launcher_foreground"
-        android:layout_below="@id/username_userfrag"
-        android:layout_toEndOf="@id/image_user_userfrag"
-        android:layout_toRightOf="@id/image_user_userfrag" />
-
-
-    <ImageView
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        android:id="@+id/image_offline"
-        android:visibility="gone"
-        android:layout_marginLeft="-15dp"
-        android:src="@drawable/ic_launcher_foreground"
-        android:layout_below="@id/username_userfrag"
-        android:layout_toEndOf="@id/image_user_userfrag"
-        android:layout_toRightOf="@id/image_user_userfrag" />
-
-
     <TextView
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
@@ -62,6 +37,32 @@
         android:id="@+id/lastMessage"
         android:layout_below="@id/username_userfrag"
         android:layout_marginLeft="60dp"/>
+
+    <ImageView
+        android:id="@+id/image_online"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_below="@id/username_userfrag"
+        android:layout_marginStart="-31dp"
+        android:layout_marginLeft="-31dp"
+        android:layout_marginTop="-2dp"
+        android:layout_toEndOf="@id/image_user_userfrag"
+        android:layout_toRightOf="@id/image_user_userfrag"
+        android:src="@drawable/background_right"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/image_offline"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_below="@id/username_userfrag"
+        android:layout_marginStart="-16dp"
+        android:layout_marginLeft="-16dp"
+        android:layout_marginTop="-1dp"
+        android:layout_toEndOf="@id/image_user_userfrag"
+        android:layout_toRightOf="@id/image_user_userfrag"
+        android:src="@drawable/background_left"
+        android:visibility="gone" />
 
 
 </RelativeLayout>

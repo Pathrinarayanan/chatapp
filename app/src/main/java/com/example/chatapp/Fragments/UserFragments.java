@@ -66,12 +66,12 @@ public class UserFragments extends Fragment {
                     Users users = ds.getValue(Users.class);
 
                     firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
+        if(users.getId()!=null && firebaseUser.getUid()!=null){
                     if (!users.getId().equals(firebaseUser.getUid())) {
 
 
                         usersList.add(users);
-
+                    }
                     }
 
 
