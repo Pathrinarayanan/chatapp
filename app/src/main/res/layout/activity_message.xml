@@ -16,28 +16,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <androidx.appcompat.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/toolbar_message"
-        android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
 
-        android:background="@color/purple_500">
+            android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar">
 
-    <ImageView
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:id="@+id/profile_image_toolbar_message"/>
+            <ImageView
+                android:id="@+id/profile_image_toolbar_message"
+                android:layout_width="30dp"
+                android:paddingLeft="10dp"
+                android:background="@color/browser_actions_bg_grey"
+                android:layout_height="30dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="25dp"
-        android:id="@+id/username_ontoolbar_message"
-        android:textColor="@android:color/white"
-        android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/username_ontoolbar_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
 
-    </androidx.appcompat.widget.Toolbar>
+        </androidx.appcompat.widget.Toolbar>
 
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -48,11 +50,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/card"
-        android:layout_below="@id/bar_layout" />
+        android:layout_below="@id/bar_layout"
+        android:background="@color/black" />
 
 
 
-      <androidx.cardview.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -63,34 +66,36 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/black"
             android:orientation="horizontal">
 
 
             <ImageButton
+                android:id="@+id/camera_gallery_btn"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:background="@drawable/c"
                 android:layout_margin="10dp"
-                android:id="@+id/camera_gallery_btn"/>
-
+                android:background="@color/black"
+                android:src="@drawable/ic_baseline_color_lens_24" />
 
             <EditText
                 android:layout_width="0dp"
                 android:layout_height="40dp"
-                android:hint=" Message"
+                android:hint="Type a message"
+                android:textColorHint="@color/white"
                 android:inputType="text"
                 android:layout_weight="1"
-                android:textColor="@android:color/black"
+                android:textColor="@android:color/white"
                 android:id="@+id/edit_message_text"
                 android:layout_marginTop="14dp"
-                android:background="@drawable/et_text" />
+                android:background="@drawable/textborder" />
 
 
             <Button
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:enabled="false"
-                android:background="@drawable/send"
+                android:background="@drawable/ic_baseline_send_24"
                 android:id="@+id/send_messsage_btn"
                 android:layout_margin="10dp"/>
 

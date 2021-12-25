@@ -28,5 +28,20 @@
     <string name="emails">Email.....</string>
     <string name="forgot_password">Forgot Password ?</string>
     <string name="xrosstalk">Xrosstalk</string>
+    <string name="type_a_message">Type a Message....</string>
+    <string name="send">SEND</string>
+    <string name="mahesha">Mahesha</string>
+    <string name="happy">HAPPY</string>
+    <string name="romantic">ROMANTIC</string>
+    <string name="broken">BROKEN</string>
+    <string name="excited">EXCITED</string>
+    <string name="high">HIGH</string>
+    <string name="sad">SAD</string>
+    <string name="attached">ATTACHED</string>
+    <string name="confused">CONFUSED</string>
+    <string name="angry">ANGRY</string>
+    <string name="normal">NORMAL</string>
+    <string name="block">Block</string>
+    <string name="delete_chat">Delete Chat</string>
 
 </resources>
