@@ -71,7 +71,7 @@
 
 
             <ImageButton
-                android:id="@+id/camera_gallery_btn"
+                android:id="@+id/moodsetter"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_margin="10dp"

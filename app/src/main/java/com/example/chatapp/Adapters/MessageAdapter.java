@@ -63,7 +63,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
 
         Chats chats  = chatslist.get(position);
 
-        holder.messagetext.setText(chats.getMessage());
+if(chats.getMessage()!=null ){
+    holder.messagetext.setText(chats.getMessage());
+}
 
 
         if (imageURL.equals("default")) {

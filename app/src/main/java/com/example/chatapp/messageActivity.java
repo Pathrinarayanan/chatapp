@@ -1,14 +1,19 @@
 package com.example.chatapp;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -53,9 +58,11 @@ public class messageActivity extends AppCompatActivity {
     TextView usernameonToolbar;
     Toolbar toolbar;
     FirebaseUser firebaseUser;
+    TextView sendermessage, receivermessage;
 
     EditText et_message;
     Button send;
+    ImageView moodsetterBtn;
 
     DatabaseReference reference;
 
@@ -64,6 +71,7 @@ public class messageActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     ValueEventListener seenlistener;
     APIService apiService;
+
     Boolean notify = false;
 
 
@@ -76,7 +84,8 @@ public class messageActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        sendermessage = findViewById(R.id.show_message);
+        // receivermessage = findViewById(R.id.show_messagel);
         imageViewOnToolbar = findViewById(R.id.profile_image_toolbar_message);
         usernameonToolbar = findViewById(R.id.username_ontoolbar_message);
         apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
@@ -87,6 +96,7 @@ public class messageActivity extends AppCompatActivity {
 
         send = findViewById(R.id.send_messsage_btn);
         et_message = findViewById(R.id.edit_message_text);
+        moodsetterBtn = findViewById(R.id.moodsetter);
 
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -117,7 +127,6 @@ public class messageActivity extends AppCompatActivity {
                 readMessages(myid, friendid, users.getImageURL());
 
 
-
             }
 
             @Override
@@ -128,10 +137,6 @@ public class messageActivity extends AppCompatActivity {
 
 
         seenMessage(friendid);
-
-
-
-
 
 
         et_message.addTextChangedListener(new TextWatcher() {
@@ -165,6 +170,26 @@ public class messageActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
 
+            }
+        });
+
+        moodsetterBtn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //Creating the instance of PopupMenu
+                PopupMenu popup = new PopupMenu(messageActivity.this, moodsetterBtn);
+                popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+
+                //registering popup with OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        Toast.makeText(messageActivity.this, ""+ item.getTitle()+" mood is setted!!", Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                });
+
+                popup.show();//showing popup menu
             }
         });
 
@@ -363,6 +388,7 @@ public class messageActivity extends AppCompatActivity {
         });
     }
 
+
     private void Status (final String status) {
 
 
@@ -375,6 +401,13 @@ public class messageActivity extends AppCompatActivity {
 
 
 
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.chatmenu,menu);
+        return true;
     }
 
     @Override
