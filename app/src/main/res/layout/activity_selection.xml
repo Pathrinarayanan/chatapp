@@ -2,77 +2,72 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/selection"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
-    tools:context=".Login.Register">
+    tools:context=".Login.Selection">
 
-    <EditText
-        android:id="@+id/txtEmail"
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="414dp"
+        android:layout_height="264dp"
+        android:background="#212121"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+
+        android:id="@+id/navigatelogin"
         android:layout_width="350dp"
         android:layout_height="50dp"
-        android:background="#313131"
         android:backgroundTint="#313131"
-        android:ems="10"
         android:fontFamily="@font/montserrat"
-        android:hint="@string/enter_your_email"
-        android:importantForAutofill="no"
-        android:inputType="textEmailSubject"
-        android:textColor="@color/white"
-        android:textColorHint="@color/black"
+        android:text="@string/login"
         android:textSize="20sp"
+        android:theme="@style/Button.Login"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.236"
-        tools:ignore="TextContrastCheck" />
+        app:layout_constraintVertical_bias="0.923"
+        tools:text="@string/login" />
 
     <Button
-        android:id="@+id/btnSendOTP"
+        android:id="@+id/navigatesignup"
         android:layout_width="350dp"
         android:layout_height="50dp"
         android:backgroundTint="@color/xrossorange"
         android:fontFamily="@font/montserrat"
-        android:text="@string/next"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:text="@string/signup"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.334"
+        app:layout_constraintVertical_bias="0.813"
         tools:ignore="TextContrastCheck" />
 
     <TextView
-        android:id="@+id/txtenteremail"
-        android:layout_width="152dp"
-        android:layout_height="30dp"
+        android:id="@+id/welcometext"
+        android:layout_width="344dp"
+        android:layout_height="37dp"
         android:fontFamily="@font/montserrat"
-        android:text="@string/enter_email"
-        android:textColor="@color/white"
-        android:textSize="25sp"
+        android:text="@string/welcome_to_xrosstalk"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.042" />
-
-    <TextView
-        android:id="@+id/txtenteremail_field"
-        android:layout_width="197dp"
-        android:layout_height="24dp"
-        android:fontFamily="@font/montserrat"
-        android:text="@string/your_email_address"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.14"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.179" />
+        app:layout_constraintVertical_bias="0.704" />
 </androidx.constraintlayout.widget.ConstraintLayout>

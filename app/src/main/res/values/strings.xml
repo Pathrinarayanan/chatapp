@@ -44,4 +44,24 @@
     <string name="block">Block</string>
     <string name="delete_chat">Delete Chat</string>
 
+
+    <string name="enter_your_email">Enter your email</string>
+    <string name="enter_email">Enter email</string>
+    <string name="your_email_address">Your email address</string>
+    <string name="enter_otp">Enter OTP</string>
+    <string name="verification">Verification</string>
+    <string name="signup">Register</string>
+
+    <string name="welcome_to_xrosstalk">Welcome to Xrosstalk</string>
+    <string name="app_name_caps">XROSSTALK</string>
+    <string name="password_recovery">Password Recovery</string>
+
+
+    <string name="leader">Leader</string>
+    <string name="peace_maker">Peace Maker</string>
+    <string name="challenger">Challenger</string>
+    <string name="enthusiast">Enthusiast</string>
+    <string name="investigator">Investigator</string>
+    <string name="individualist">Individualist</string>
+
 </resources>

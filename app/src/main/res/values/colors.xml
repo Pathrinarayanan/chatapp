@@ -23,5 +23,16 @@
     <color name="black_shade">#333333</color>
     <color name="colorPrimary">#222A35</color>
     <color name="colorPrimaryDark">#222A35</color>
+    <color name="tagHelper">#7AA6D7</color>
+    <color name="tagReformer">#6F9D80</color>
+    <color name="tagLoyalist">#F7D967</color>
+    <color name="tagPeaceMaker">#4C8DAF</color>
+    <color name="tagChallenger">#E54151</color>
+    <color name="tagLeader">#F8AB81</color>
+    <color name="tagEnthusiast">#DC6CA7</color>
+    <color name="tagInvestigator">#943C3C</color>
+    <color name="tagIndividualist">#A64DA6</color>
+    <color name="xrossorange">#FB8B00</color>
+    <color name="xrossgrey">#313131</color>
     <color name="Aqua">#54B9C1</color>
 </resources>
