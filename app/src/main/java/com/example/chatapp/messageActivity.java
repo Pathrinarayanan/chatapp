@@ -1,17 +1,23 @@
 package com.example.chatapp;
 
+import static android.app.PendingIntent.getActivity;
+
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -230,13 +236,14 @@ public class messageActivity extends AppCompatActivity {
                 for (DataSnapshot ds: snapshot.getChildren()) {
 
                     Chats chats = ds.getValue(Chats.class);
+                    if(chats.getReciever() !=null && myid !=null && chats.getSender() !=null  && friendid !=null) {
+                        if (chats.getReciever().equals(myid) && chats.getSender().equals(friendid)) {
 
-                    if (chats.getReciever().equals(myid) && chats.getSender().equals(friendid)) {
+                            HashMap<String, Object> hashMap = new HashMap<>();
+                            hashMap.put("isseen", true);
+                            ds.getRef().updateChildren(hashMap);
 
-                        HashMap<String, Object> hashMap = new HashMap<>();
-                        hashMap.put("isseen", true);
-                        ds.getRef().updateChildren(hashMap);
-
+                        }
                     }
 
 
@@ -270,21 +277,22 @@ public class messageActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 chatsList.clear();
 
-                for (DataSnapshot ds: snapshot.getChildren()) {
+                for (DataSnapshot ds : snapshot.getChildren()) {
 
                     Chats chats = ds.getValue(Chats.class);
+                    if (chats.getReciever() != null && myid != null && chats.getSender() != null && friendid != null) {
+                        if (chats.getSender().equals(myid) && chats.getReciever().equals(friendid) ||
+                                chats.getSender().equals(friendid) && chats.getReciever().equals(myid)) {
 
-                    if (chats.getSender().equals(myid) && chats.getReciever().equals(friendid) ||
-                            chats.getSender().equals(friendid) && chats.getReciever().equals(myid)) {
+                            chatsList.add(chats);
+                        }
 
-                        chatsList.add(chats);
+                        messageAdapter = new MessageAdapter(messageActivity.this, chatsList, imageURL);
+                        recyclerView.setAdapter(messageAdapter);
+
                     }
 
-                    messageAdapter = new MessageAdapter(messageActivity.this, chatsList, imageURL);
-                    recyclerView.setAdapter(messageAdapter);
-
                 }
-
             }
 
             @Override
@@ -411,6 +419,63 @@ public class messageActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.delete: {
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setMessage("Are you sure you want to delete this chat? \nAll the chat will be cleared for both");
+                        alertDialogBuilder.setPositiveButton("yes",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface arg0, int arg1) {
+                                        Toast.makeText(messageActivity.this,"Message deleted",Toast.LENGTH_LONG).show();
+                                        deleteMsg();
+                                        deleteFriendMsg();
+                                    }
+                                });
+
+                alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+                break;
+            }
+            case R.id.block: {
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setMessage("Are you sure you want to block this chat?");
+                alertDialogBuilder.setPositiveButton("yes",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                Toast.makeText(messageActivity.this,"Blocked",Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+                alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+            }
+
+                return true;
+
+
+            }
+        return true;
+    }
+    @Override
     protected void onResume() {
         super.onResume();
         Status("online");
@@ -423,6 +488,46 @@ public class messageActivity extends AppCompatActivity {
         Status("offline");
         reference.removeEventListener(seenlistener);
     }
+    private void deleteMsg() {
+        final String myuid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        //String msgtimestmp = list.get(position).getTimestamp();
+        DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Chats");
+        Query query = dbref.orderByChild("reciever").equalTo(friendid);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                    if (dataSnapshot1.child("sender").getValue().equals(myuid)) {
+                        dataSnapshot1.getRef().removeValue();
+}
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+    private void deleteFriendMsg() {
+        final String myuid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Chats");
+        Query query = dbref.orderByChild("reciever").equalTo(myuid);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot dataSnapshot2 : dataSnapshot.getChildren()) {
+                    if (dataSnapshot2.child("sender").getValue().equals(friendid)) {
+                        dataSnapshot2.getRef().removeValue();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 
 }

@@ -52,6 +52,9 @@
             android:name=".Login.Login"
             android:exported="false" />
         <activity
+            android:name=".Login.Register4"
+            android:exported="false" />
+        <activity
             android:name=".Login.Register"
             android:exported="false" />
 

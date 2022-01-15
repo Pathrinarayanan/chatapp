@@ -17,7 +17,7 @@
         android:fontFamily="@font/montserrat"
         android:hint="@string/enter_your_email"
         android:importantForAutofill="no"
-        android:inputType="textEmailSubject"
+        android:inputType="textEmailAddress"
         android:textColor="@color/white"
         android:textColorHint="@color/black"
         android:textSize="20sp"

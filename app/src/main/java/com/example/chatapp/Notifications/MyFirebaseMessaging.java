@@ -51,12 +51,12 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
 
         RemoteMessage.Notification notification = remoteMessage.getNotification();
         int j = Integer.parseInt(user.replaceAll("[\\D]", ""));
-        Intent intent = new Intent(this, com.example.chatapp.messageActivity.class);
+        Intent intent = new Intent(this, com.example.chatapp.MainActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("userid", user);
         intent.putExtras(bundle);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, j, intent, PendingIntent.FLAG_ONE_SHOT);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         Uri defaultSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         com.example.chatapp.Notifications.OreoNotification oreoNotification = new com.example.chatapp.Notifications.OreoNotification(this);
@@ -68,7 +68,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
             i = j;
         }
 
-        oreoNotification.getManager().notify(i, builder.build());
+        oreoNotification.getManager().notify(1, builder.build());
 
     }
 
@@ -81,15 +81,15 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
 
         RemoteMessage.Notification notification = remoteMessage.getNotification();
         int j = Integer.parseInt(user.replaceAll("[\\D]", ""));
-        Intent intent = new Intent(this, com.example.chatapp.messageActivity.class);
+        Intent intent = new Intent(this, com.example.chatapp.MainActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("userid", user);
         intent.putExtras(bundle);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, j, intent, PendingIntent.FLAG_ONE_SHOT);
+      //  intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);f
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Uri defaultSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(MyFirebaseMessaging.this)
                 .setSmallIcon(Integer.parseInt(icon))
                 .setContentTitle(title)
                 .setContentText(body)
@@ -103,6 +103,6 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
             i = j;
         }
 
-        noti.notify(i, builder.build());
+        noti.notify(1, builder.build());
     }
 }

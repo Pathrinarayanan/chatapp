@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,6 +27,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
@@ -34,6 +36,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private List<Users> mUsers;
     private boolean ischat;
     private OnItemClick onItemClick;
+    private FirebaseUser firebaseUser;
 
     Typeface MR,MRR;
     String theLastMessage;
@@ -59,9 +62,34 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         final Users user = mUsers.get(position);
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        holder.btn_follow.setVisibility(View.VISIBLE);
 
 
         holder.username.setText(user.getUsername());
+        isFollowing(user.getId(), holder.btn_follow);
+        if (user.getId().equals(firebaseUser.getUid())){
+            holder.btn_follow.setVisibility(View.GONE);
+        }
+        holder.btn_follow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (holder.btn_follow.getText().toString().equals("follow")) {
+                    FirebaseDatabase.getInstance().getReference().child("Follow").child(firebaseUser.getUid())
+                            .child("following").child(user.getId()).setValue(true);
+                    FirebaseDatabase.getInstance().getReference().child("Follow").child(user.getId())
+                            .child("followers").child(firebaseUser.getUid()).setValue(true);
+
+                    addNotification(user.getId());
+                } else {
+                    FirebaseDatabase.getInstance().getReference().child("Follow").child(firebaseUser.getUid())
+                            .child("following").child(user.getId()).removeValue();
+                    FirebaseDatabase.getInstance().getReference().child("Follow").child(user.getId())
+                            .child("followers").child(firebaseUser.getUid()).removeValue();
+                }
+            }
+
+        });
         if (user.getImageURL().equals("default")){
             holder.profile_image.setImageResource(R.drawable.user);
         } else {
@@ -105,6 +133,17 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 //            }}
 //        });
     }
+    private void addNotification(String userid){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications").child(userid);
+
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("userid", firebaseUser.getUid());
+        hashMap.put("text", "requested following you");
+        hashMap.put("postid", "");
+        hashMap.put("ispost", false);
+
+        reference.push().setValue(hashMap);
+    }
 
     @Override
     public int getItemCount() {
@@ -118,6 +157,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         private ImageView img_on;
         private ImageView img_off;
         private TextView last_msg;
+        public Button btn_follow;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -127,6 +167,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             img_on = itemView.findViewById(R.id.image_online);
             img_off = itemView.findViewById(R.id.image_offline);
             last_msg = itemView.findViewById(R.id.lastMessage);
+            btn_follow = itemView.findViewById(R.id.follow);
         }
     }
 
@@ -141,7 +182,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Chats chat = snapshot.getValue(Chats.class);
-                    if (firebaseUser != null && chat != null) {
+                    if (firebaseUser.getUid() != null && chat.getSender()!= null && userid !=null) {
                         if (chat.getReciever().equals(firebaseUser.getUid()) && chat.getSender().equals(userid) ||
                                 chat.getReciever().equals(userid) && chat.getSender().equals(firebaseUser.getUid())) {
                             theLastMessage = chat.getMessage();
@@ -151,7 +192,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
                 switch (theLastMessage){
                     case  "default":
-                        last_msg.setText("No Message");
+                        last_msg.setText("        ");
                         break;
 
                     default:
@@ -164,6 +205,28 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+    private void isFollowing(final String userid, final Button button){
+
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                .child("Follow").child(firebaseUser.getUid()).child("following");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.child(userid).exists()){
+                    button.setText("following");
+                } else{
+                    button.setText("follow");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
             }
         });
