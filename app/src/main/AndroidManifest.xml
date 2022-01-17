@@ -44,9 +44,6 @@
             android:name=".Login.Explore"
             android:exported="false" />
         <activity
-            android:name=".Login.Selection"
-            android:exported="false" />
-        <activity
             android:name=".Login.UserActivity"
             android:exported="false" />
         <activity

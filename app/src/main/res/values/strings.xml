@@ -63,5 +63,72 @@
     <string name="enthusiast">Enthusiast</string>
     <string name="investigator">Investigator</string>
     <string name="individualist">Individualist</string>
+    <string name="hello">Hello</string>
+    <string name="popularity">Popularity</string>
+    <string name="new1">NEW</string>
+    <string name="say_hi">Say Hi !</string>
+    <string name="connect">Connect +</string>
+    <string name="message">Message…</string>
+    <string name="neha_dupia">Neha Dupia</string>
+    <string name="_2_05_am">2:05 AM</string>
+    <string name="ranjvjay_singha">Ranjvjay Singha</string>
+    <string name="ranjvijay_sinha">Ranjvijay Sinha</string>
+    <string name="_1">1</string>
+    <string name="_3">3</string>
+    <string name="_10">10</string>
+    <string name="explore">Explore</string>
+    <string name="app_label">App Label</string>
+    <string name="search">Search</string>
+    <string name="popularity_">Popularity :</string>
+    <string name="new_popularity">NEW</string>
+    <string name="connect_plus">Connect +</string>
+    <string name="requested">Requested</string>
+    <string name="explorer">Explorer</string>
+    <string name="chat">Chat</string>
+    <string name="more">More</string>
+    <string name="notification">Notification</string>
+    <string name="chat_requests">Chat Requests</string>
+    <string name="connection_requests">Connection Requests</string>
+    <string name="_7">7+</string>
+    <string name="_10_">10+</string>
+    <string name="ignore">Ignore</string>
+    <string name="boomer_bathri">Boomer Bathri</string>
+    <string name="say_hi_">Say Hi…</string>
+    <string name="share_app">Share App</string>
+    <string name="settings">Settings</string>
+    <string name="tags">Tags</string>
+    <string name="terms_conditions"><![CDATA[Terms & Conditions]]></string>
+    <string name="log_out">Log out</string>
+    <string name="about_us">About us</string>
+    <string name="blocked">Blocked</string>
+    <string name="profile">Profile</string>
+    <string name="save">Save</string>
+
+    <string-array name="Settings">
+        <item>Profile</item>
+        <item>Blocked</item>
+        <item>Tags</item>
+        <item>@string/terms_conditions</item>
+        <item>About Us</item>
+        <item>Log Out</item>
+    </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="title_activity_settings">SettingsActivity</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="title_activity_privacy">PrivacyActivity</string>
 
 </resources>

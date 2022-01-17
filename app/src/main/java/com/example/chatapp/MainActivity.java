@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,10 +49,10 @@ public class MainActivity extends AppCompatActivity {
         ViewPager viewpager = findViewById(R.id.viewPager);
 
         ViewpageAdapter viewpageAdapter = new ViewpageAdapter(getSupportFragmentManager());
-        viewpageAdapter.addFragements(new UserFragments(),"Users");
-        viewpageAdapter.addFragements(new chatsFragment(),"Chats");
+        viewpageAdapter.addFragements(new UserFragments(),"Explore");
+        viewpageAdapter.addFragements(new chatsFragment(),"Chat");
 
-        viewpageAdapter.addFragements(new ProfileFragments(),"Notification");
+        viewpageAdapter.addFragements(new ProfileFragments(),"More");
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
@@ -59,6 +60,35 @@ public class MainActivity extends AppCompatActivity {
 
         viewpager.setAdapter(viewpageAdapter);
         tabLayout.setupWithViewPager(viewpager);
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_baseline_flight_takeoff_24);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_baseline_chat_24);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_baseline_more);
+        tabLayout.getTabAt(0).getIcon().setColorFilter(getResources().getColor(android.R.color.holo_red_light), PorterDuff.Mode.SRC_IN);
+        tabLayout.getTabAt(1).getIcon().setColorFilter(getResources().getColor(android.R.color.white), PorterDuff.Mode.SRC_IN);
+        tabLayout.getTabAt(2).getIcon().setColorFilter(getResources().getColor(android.R.color.white), PorterDuff.Mode.SRC_IN);
+
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                tab.getIcon().setColorFilter(getResources().getColor(android.R.color.holo_red_light), PorterDuff.Mode.SRC_IN);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                tab.getIcon().setColorFilter(getResources().getColor(android.R.color.white), PorterDuff.Mode.SRC_IN);
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+              tab.getIcon().setColorFilter(getResources().getColor(android.R.color.holo_red_light), PorterDuff.Mode.SRC_IN);
+
+            }
+
+        });
+
+
+
         firebaseuser = FirebaseAuth.getInstance().getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseuser.getUid());
         databaseReference.addValueEventListener(new ValueEventListener() {
