@@ -19,19 +19,19 @@
         android:visibility="gone"
         android:src="@drawable/user"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:padding="8dp"
-        android:text="Hello"
-        android:textSize="18sp"
-        android:layout_alignParentEnd="true"
-        android:textColor="@android:color/black"
-        android:id="@+id/show_message"
-        android:layout_toRightOf="@id/chat_image"
-        android:background="#FFFFFFFF"
-        android:layout_alignParentRight="true" />
+        <TextView
+            android:id="@+id/show_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/chat_image"
+            android:background="@drawable/normalrightres"
+            android:padding="8dp"
+            android:text="Hello"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
 
         <TextView
             android:layout_width="wrap_content"

@@ -1,8 +1,6 @@
 package com.example.chatapp;
 
-import static android.app.PendingIntent.getActivity;
 
-import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,23 +10,35 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
+
 import android.graphics.Color;
-import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Layout;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.chatapp.Adapters.HappyAdapter;
 import com.example.chatapp.Adapters.MessageAdapter;
+import com.example.chatapp.Adapters.angryAdapter;
+import com.example.chatapp.Adapters.attachedAdapter;
+import com.example.chatapp.Adapters.brokenAdapter;
+import com.example.chatapp.Adapters.confusedAdapter;
+import com.example.chatapp.Adapters.excitedAdapter;
+import com.example.chatapp.Adapters.highAdapter;
+import com.example.chatapp.Adapters.romanticAdapter;
+import com.example.chatapp.Adapters.sadAdapter;
 import com.example.chatapp.Fragments.APIService;
 import com.example.chatapp.Model.Chats;
 import com.example.chatapp.Model.Users;
@@ -74,9 +84,13 @@ public class messageActivity extends AppCompatActivity {
 
     List<Chats> chatsList;
     MessageAdapter messageAdapter;
+    HappyAdapter happyAdapter;
     RecyclerView recyclerView;
     ValueEventListener seenlistener;
     APIService apiService;
+    RelativeLayout leftchats;
+    RecyclerView barlay;
+    Layout layoutInflater;
 
     Boolean notify = false;
 
@@ -90,7 +104,6 @@ public class messageActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        sendermessage = findViewById(R.id.show_message);
         // receivermessage = findViewById(R.id.show_messagel);
         imageViewOnToolbar = findViewById(R.id.profile_image_toolbar_message);
         usernameonToolbar = findViewById(R.id.username_ontoolbar_message);
@@ -103,6 +116,8 @@ public class messageActivity extends AppCompatActivity {
         send = findViewById(R.id.send_messsage_btn);
         et_message = findViewById(R.id.edit_message_text);
         moodsetterBtn = findViewById(R.id.moodsetter);
+        leftchats = findViewById(R.id.leftchat);
+
 
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -128,9 +143,87 @@ public class messageActivity extends AppCompatActivity {
                 } else {
 
                     Glide.with(getApplicationContext()).load(users.getImageURL()).into(imageViewOnToolbar);
-                }
+                }readMessages(myid, friendid, users.getImageURL());
+                moodsetterBtn.setOnClickListener(new View.OnClickListener() {
 
-                readMessages(myid, friendid, users.getImageURL());
+                    @Override
+                    public void onClick(View v) {
+                        //Creating the instance of PopupMenu
+                        PopupMenu popup = new PopupMenu(messageActivity.this, moodsetterBtn);
+                        popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+
+                        //registering popup with OnMenuItemClickListener
+                        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            public boolean onMenuItemClick(MenuItem item) {
+                                Toast.makeText(messageActivity.this, ""+ item.getTitle()+" mood is setted!!", Toast.LENGTH_SHORT).show();
+                                switch (item.getItemId()){
+                                    case R.id.happy:
+                                    {
+                                        HappyReadMessages(myid, friendid, users.getImageURL());
+                                        break;
+                                    }
+                                    case R.id.sad:{
+                                        sadreadMessages(myid, friendid, users.getImageURL());
+                                        break;
+                                    }
+                                    case R.id.romantic:{
+                                        RomanticreadMessages(myid, friendid, users.getImageURL());
+                                        break;
+                                    }
+                                    case R.id.high:{
+                                        highreadMessages(myid,friendid,users.getImageURL());
+                                        break;
+                                    }
+                                    case R.id.excited:{
+                                        excitedreadMessages(myid, friendid, users.getImageURL());
+                                        break;
+
+                                    }
+                                    case R.id.angry:{
+                                        angryreadMessages(myid, friendid, users.getImageURL());
+                                        break;
+
+                                    }
+                                    case R.id.normalmood:{
+                                        readMessages(myid, friendid, users.getImageURL());
+                                        break;
+
+                                    }
+                                    case R.id.confused:{
+                                        confusedreadMessages(myid, friendid, users.getImageURL());
+                                        break;
+
+                                    }
+                                    case R.id.attached:{
+                                        attachedreadMessages(myid, friendid, users.getImageURL());
+                                        break;
+
+                                    }
+                                    case R.id.broken:{
+                                        brokenreadMessages(myid, friendid, users.getImageURL());
+                                        break;
+
+                                    }
+
+
+
+
+
+
+
+
+
+                                }
+                                return true;
+                            }
+                        });
+
+                        popup.show();//showing popup menu
+                    }
+                });
+
+
+
 
 
             }
@@ -149,7 +242,7 @@ public class messageActivity extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                if (s.toString().length() > 0) {
+                if (s.toString().length() > 0 && s.toString().trim()!="") {
 
                     send.setEnabled(true);
 
@@ -179,25 +272,7 @@ public class messageActivity extends AppCompatActivity {
             }
         });
 
-        moodsetterBtn.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                //Creating the instance of PopupMenu
-                PopupMenu popup = new PopupMenu(messageActivity.this, moodsetterBtn);
-                popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
-
-                //registering popup with OnMenuItemClickListener
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        Toast.makeText(messageActivity.this, ""+ item.getTitle()+" mood is setted!!", Toast.LENGTH_SHORT).show();
-                        return true;
-                    }
-                });
-
-                popup.show();//showing popup menu
-            }
-        });
 
 
 
@@ -208,10 +283,16 @@ public class messageActivity extends AppCompatActivity {
 
                 notify = true;
                 message = et_message.getText().toString();
+                if(message.trim().equals("")){
+                    Toast.makeText(messageActivity.this,"You cannot send the empty message",Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    sendMessage(myid, friendid, message);
+                }
 
-                sendMessage(myid, friendid, message);
 
-                et_message.setText(" ");
+
+                et_message.setText("");
 
 
             }
@@ -238,17 +319,12 @@ public class messageActivity extends AppCompatActivity {
                     Chats chats = ds.getValue(Chats.class);
                     if(chats.getReciever() !=null && myid !=null && chats.getSender() !=null  && friendid !=null) {
                         if (chats.getReciever().equals(myid) && chats.getSender().equals(friendid)) {
-
                             HashMap<String, Object> hashMap = new HashMap<>();
                             hashMap.put("isseen", true);
                             ds.getRef().updateChildren(hashMap);
 
                         }
                     }
-
-
-
-
                 }
 
             }
@@ -258,11 +334,6 @@ public class messageActivity extends AppCompatActivity {
 
             }
         });
-
-
-
-
-
 
     }
 
@@ -289,7 +360,323 @@ public class messageActivity extends AppCompatActivity {
 
                         messageAdapter = new MessageAdapter(messageActivity.this, chatsList, imageURL);
                         recyclerView.setAdapter(messageAdapter);
+                    }
 
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+    private void attachedreadMessages(final String myid, final String friendid, final String imageURL) {
+
+        chatsList = new ArrayList<>();
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Chats");
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                chatsList.clear();
+
+                for (DataSnapshot ds : snapshot.getChildren()) {
+
+                    Chats chats = ds.getValue(Chats.class);
+                    if (chats.getReciever() != null && myid != null && chats.getSender() != null && friendid != null) {
+                        if (chats.getSender().equals(myid) && chats.getReciever().equals(friendid) ||
+                                chats.getSender().equals(friendid) && chats.getReciever().equals(myid)) {
+
+                            chatsList.add(chats);
+                        }
+
+                       attachedAdapter attachedadapter = new attachedAdapter(messageActivity.this, chatsList, imageURL);
+                        recyclerView.setAdapter(attachedadapter);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+    private void highreadMessages(final String myid, final String friendid, final String imageURL) {
+
+        chatsList = new ArrayList<>();
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Chats");
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                chatsList.clear();
+
+                for (DataSnapshot ds : snapshot.getChildren()) {
+
+                    Chats chats = ds.getValue(Chats.class);
+                    if (chats.getReciever() != null && myid != null && chats.getSender() != null && friendid != null) {
+                        if (chats.getSender().equals(myid) && chats.getReciever().equals(friendid) ||
+                                chats.getSender().equals(friendid) && chats.getReciever().equals(myid)) {
+
+                            chatsList.add(chats);
+                        }
+
+                        highAdapter highadapter = new highAdapter(messageActivity.this, chatsList, imageURL);
+                        recyclerView.setAdapter(highadapter);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+    private void brokenreadMessages(final String myid, final String friendid, final String imageURL) {
+
+        chatsList = new ArrayList<>();
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Chats");
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                chatsList.clear();
+
+                for (DataSnapshot ds : snapshot.getChildren()) {
+
+                    Chats chats = ds.getValue(Chats.class);
+                    if (chats.getReciever() != null && myid != null && chats.getSender() != null && friendid != null) {
+                        if (chats.getSender().equals(myid) && chats.getReciever().equals(friendid) ||
+                                chats.getSender().equals(friendid) && chats.getReciever().equals(myid)) {
+
+                            chatsList.add(chats);
+                        }
+
+                        brokenAdapter brokenadapter = new brokenAdapter(messageActivity.this, chatsList, imageURL);
+                        recyclerView.setAdapter(brokenadapter);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+    private void confusedreadMessages(final String myid, final String friendid, final String imageURL) {
+
+        chatsList = new ArrayList<>();
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Chats");
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                chatsList.clear();
+
+                for (DataSnapshot ds : snapshot.getChildren()) {
+
+                    Chats chats = ds.getValue(Chats.class);
+                    if (chats.getReciever() != null && myid != null && chats.getSender() != null && friendid != null) {
+                        if (chats.getSender().equals(myid) && chats.getReciever().equals(friendid) ||
+                                chats.getSender().equals(friendid) && chats.getReciever().equals(myid)) {
+
+                            chatsList.add(chats);
+                        }
+
+                        confusedAdapter confusedadapter = new confusedAdapter(messageActivity.this, chatsList, imageURL);
+                        recyclerView.setAdapter(confusedadapter);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+    private void excitedreadMessages(final String myid, final String friendid, final String imageURL) {
+
+        chatsList = new ArrayList<>();
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Chats");
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                chatsList.clear();
+
+                for (DataSnapshot ds : snapshot.getChildren()) {
+
+                    Chats chats = ds.getValue(Chats.class);
+                    if (chats.getReciever() != null && myid != null && chats.getSender() != null && friendid != null) {
+                        if (chats.getSender().equals(myid) && chats.getReciever().equals(friendid) ||
+                                chats.getSender().equals(friendid) && chats.getReciever().equals(myid)) {
+
+                            chatsList.add(chats);
+                        }
+
+                        excitedAdapter excitedadapter = new excitedAdapter(messageActivity.this, chatsList, imageURL);
+                        recyclerView.setAdapter(excitedadapter);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+    private void RomanticreadMessages(final String myid, final String friendid, final String imageURL) {
+
+        chatsList = new ArrayList<>();
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Chats");
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                chatsList.clear();
+
+                for (DataSnapshot ds : snapshot.getChildren()) {
+
+                    Chats chats = ds.getValue(Chats.class);
+                    if (chats.getReciever() != null && myid != null && chats.getSender() != null && friendid != null) {
+                        if (chats.getSender().equals(myid) && chats.getReciever().equals(friendid) ||
+                                chats.getSender().equals(friendid) && chats.getReciever().equals(myid)) {
+
+                            chatsList.add(chats);
+                        }
+
+                        romanticAdapter romanticadapter = new romanticAdapter(messageActivity.this, chatsList, imageURL);
+                        recyclerView.setAdapter(romanticadapter);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+    private void sadreadMessages(final String myid, final String friendid, final String imageURL) {
+
+        chatsList = new ArrayList<>();
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Chats");
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                chatsList.clear();
+
+                for (DataSnapshot ds : snapshot.getChildren()) {
+
+                    Chats chats = ds.getValue(Chats.class);
+                    if (chats.getReciever() != null && myid != null && chats.getSender() != null && friendid != null) {
+                        if (chats.getSender().equals(myid) && chats.getReciever().equals(friendid) ||
+                                chats.getSender().equals(friendid) && chats.getReciever().equals(myid)) {
+
+                            chatsList.add(chats);
+                        }
+
+                        sadAdapter sadadapter = new sadAdapter(messageActivity.this, chatsList, imageURL);
+                        recyclerView.setAdapter(sadadapter);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
+
+    private void angryreadMessages(final String myid, final String friendid, final String imageURL) {
+
+        chatsList = new ArrayList<>();
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Chats");
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                chatsList.clear();
+
+                for (DataSnapshot ds : snapshot.getChildren()) {
+
+                    Chats chats = ds.getValue(Chats.class);
+                    if (chats.getReciever() != null && myid != null && chats.getSender() != null && friendid != null) {
+                        if (chats.getSender().equals(myid) && chats.getReciever().equals(friendid) ||
+                                chats.getSender().equals(friendid) && chats.getReciever().equals(myid)) {
+
+                            chatsList.add(chats);
+                        }
+
+                        angryAdapter angryadapter = new angryAdapter(messageActivity.this, chatsList, imageURL);
+                        recyclerView.setAdapter(angryadapter);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+    private void HappyReadMessages(final String myid, final String friendid, final String imageURL) {
+
+        chatsList = new ArrayList<>();
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Chats");
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                chatsList.clear();
+
+                for (DataSnapshot ds : snapshot.getChildren()) {
+
+                    Chats chats = ds.getValue(Chats.class);
+                    if (chats.getReciever() != null && myid != null && chats.getSender() != null && friendid != null) {
+                        if (chats.getSender().equals(myid) && chats.getReciever().equals(friendid) ||
+                                chats.getSender().equals(friendid) && chats.getReciever().equals(myid)) {
+
+                            chatsList.add(chats);
+                        }
+
+                        happyAdapter = new HappyAdapter(messageActivity.this, chatsList, imageURL);
+                        recyclerView.setAdapter(happyAdapter);
                     }
 
                 }
@@ -307,9 +694,6 @@ public class messageActivity extends AppCompatActivity {
 
 
          DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-
-
-
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("sender", myid);
         hashMap.put("reciever", friendid);
@@ -327,8 +711,6 @@ public class messageActivity extends AppCompatActivity {
 
 
                 if (!snapshot.exists()) {
-
-
                     reference1.child("id").setValue(friendid);
                 }
 

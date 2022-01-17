@@ -2,32 +2,33 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/happy"
-        android:title="Happy" />
-    <item
-        android:id="@+id/sad"
-        android:title="Sad"/>
+        android:title="HAPPY" />
+
     <item
         android:id="@+id/romantic"
-        android:title="Romantic"/>
+        android:title="ROMANTIC"/>
     <item
         android:id="@+id/broken"
-        android:title="Broken"/>
+        android:title="BROKEN"/>
     <item
         android:id="@+id/excited"
-        android:title="Excited"/>
+        android:title="EXCITED"/>
     <item
         android:id="@+id/high"
-        android:title="Happy" />
+        android:title="HIGH" />
+    <item
+        android:id="@+id/sad"
+        android:title="SAD"/>
     <item
         android:id="@+id/attached"
-        android:title="Attached"/>
+        android:title="ATTACHED"/>
     <item
         android:id="@+id/confused"
-        android:title="Confused"/>
+        android:title="CONFUSED"/>
     <item
         android:id="@+id/angry"
-        android:title="Angry"/>
+        android:title="ANGRY"/>
     <item
-        android:id="@+id/normal"
-        android:title="Normal"/>
+        android:id="@+id/normalmood"
+        android:title="NORMAL"/>
 </menu>

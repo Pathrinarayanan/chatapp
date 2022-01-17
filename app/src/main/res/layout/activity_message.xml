@@ -72,8 +72,8 @@
 
             <ImageButton
                 android:id="@+id/moodsetter"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="74dp"
+                android:layout_height="56dp"
                 android:layout_margin="10dp"
                 android:background="@color/black"
                 android:src="@drawable/ic_baseline_color_lens_24" />

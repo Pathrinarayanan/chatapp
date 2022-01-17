@@ -30,7 +30,7 @@ public class splashs extends AppCompatActivity {
                     firebaseAuth = FirebaseAuth.getInstance();
                             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                             if (user == null) {
-                                Intent i = new Intent(splashs.this, com.example.chatapp.Login.Selection.class);
+                                Intent i = new Intent(splashs.this, com.example.chatapp.splashMain.class);
                                 startActivity(i);
                                 finish();
 

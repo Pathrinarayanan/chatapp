@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
         <activity
+            android:name=".splashMain"
+            android:exported="true" />
+        <activity
             android:name=".messageActivity"
             android:exported="true"
             android:parentActivityName=".MainActivity" />
@@ -19,8 +22,8 @@
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
@@ -29,8 +32,6 @@
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
-
             </intent-filter>
         </activity>
         <activity
@@ -50,9 +51,6 @@
             android:exported="false" />
         <activity
             android:name=".Login.Login"
-            android:exported="false" />
-        <activity
-            android:name=".Login.Register4"
             android:exported="false" />
         <activity
             android:name=".Login.Register"
