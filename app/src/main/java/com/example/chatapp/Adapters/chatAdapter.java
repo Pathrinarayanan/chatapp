@@ -54,7 +54,7 @@ public class chatAdapter extends RecyclerView.Adapter<chatAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.layoutofusers, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.layout_of_chatusers, parent, false);
         return new chatAdapter.ViewHolder(view);
     }
 

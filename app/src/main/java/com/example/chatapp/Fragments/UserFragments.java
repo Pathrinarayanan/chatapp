@@ -19,7 +19,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.chatapp.Adapters.OnItemClick;
+import com.example.chatapp.Adapters.SearchAdapter;
 import com.example.chatapp.Adapters.UserAdapter;
+import com.example.chatapp.Adapters.chatAdapter;
 import com.example.chatapp.Model.Users;
 import com.example.chatapp.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,6 +45,7 @@ public class UserFragments extends Fragment {
 
 
     private UserAdapter userAdapter;
+    private SearchAdapter Searchadapter;
     private List<Users> mUsers;
     static OnItemClick onItemClick;
 
@@ -73,13 +76,13 @@ public class UserFragments extends Fragment {
 
         mUsers = new ArrayList<>();
 
-        readUsers();
 
+        readUsers();
         search_users = view.findViewById(R.id.search_users);
         search_users.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                readUsers();
             }
 
             @Override
@@ -89,7 +92,7 @@ public class UserFragments extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-
+                readUsers();
             }
         });
 
@@ -117,8 +120,10 @@ public class UserFragments extends Fragment {
                     }
                 }
 
-                userAdapter = new UserAdapter(getContext(),onItemClick, mUsers, false);
-                recyclerView.setAdapter(userAdapter);
+               //userAdapter = new UserAdapter(getContext(),onItemClick, mUsers, false);
+                Searchadapter = new SearchAdapter(getContext(),onItemClick,mUsers,false);
+                recyclerView.setAdapter(Searchadapter);
+              //  recyclerView.setAdapter(userAdapter);
             }
 
             @Override

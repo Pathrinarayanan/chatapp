@@ -67,16 +67,17 @@
         android:text="Message"
         android:textSize="15sp"
         android:textStyle="italic" />
+
     <Button
+        android:id="@+id/follow"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_alignParentEnd="true"
-        android:id="@+id/follow"
-        android:textColor="@color/black"
+        android:layout_marginEnd="17dp"
+        android:background="@drawable/mybutton"
         android:text="connect"
-        android:layout_centerVertical="true"
-        android:visibility="gone"/>
-
+        android:textColor="@color/black"
+        android:visibility="visible" />
 
 
 </RelativeLayout>

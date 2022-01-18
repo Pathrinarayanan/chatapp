@@ -54,7 +54,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.layoutofusers, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.userlayouthi, parent, false);
         return new UserAdapter.ViewHolder(view);
     }
 
@@ -63,33 +63,15 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
         final Users user = mUsers.get(position);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        holder.btn_follow.setVisibility(View.VISIBLE);
+        //holder.say_hi_btn.setVisibility(View.VISIBLE);
 
 
         holder.username.setText(user.getUsername());
-        isFollowing(user.getId(), holder.btn_follow);
         if (user.getId().equals(firebaseUser.getUid())){
-            holder.btn_follow.setVisibility(View.GONE);
+            //holder.btn_follow.setVisibility(View.GONE);
         }
-        holder.btn_follow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (holder.btn_follow.getText().toString().equals("follow")) {
-                    FirebaseDatabase.getInstance().getReference().child("Follow").child(firebaseUser.getUid())
-                            .child("following").child(user.getId()).setValue(true);
-                    FirebaseDatabase.getInstance().getReference().child("Follow").child(user.getId())
-                            .child("followers").child(firebaseUser.getUid()).setValue(true);
 
-                    addNotification(user.getId());
-                } else {
-                    FirebaseDatabase.getInstance().getReference().child("Follow").child(firebaseUser.getUid())
-                            .child("following").child(user.getId()).removeValue();
-                    FirebaseDatabase.getInstance().getReference().child("Follow").child(user.getId())
-                            .child("followers").child(firebaseUser.getUid()).removeValue();
-                }
-            }
 
-        });
         if (user.getImageURL().equals("default")){
             holder.profile_image.setImageResource(R.drawable.user);
         } else {
