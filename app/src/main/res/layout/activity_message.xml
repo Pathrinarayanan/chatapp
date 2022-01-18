@@ -85,7 +85,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_baseline_color_lens_24" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/send_messsage_btn"
                 android:layout_width="30dp"
                 android:layout_height="30dp"

@@ -11,14 +11,14 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="67dp">
+        android:layout_height="0dp">
 
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolhome"
-            android:background="@color/orange"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/orange"
             android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar">
 
 
@@ -46,7 +46,7 @@
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="640dp"
+        android:layout_height="707dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     </androidx.viewpager.widget.ViewPager>
@@ -54,7 +54,7 @@
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tablayout"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="88dp"
         app:tabIndicator="@android:color/white"
         app:tabSelectedTextColor="@android:color/white"
         app:tabTextColor="@android:color/white" />

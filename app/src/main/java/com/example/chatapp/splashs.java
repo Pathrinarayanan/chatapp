@@ -24,7 +24,7 @@ public class splashs extends AppCompatActivity {
 
                 try {
                     //sleep thread for 10 seconds, time in milliseconds
-                    sleep(3000);
+                    sleep(1000);
 
                     //start new activity
                     firebaseAuth = FirebaseAuth.getInstance();

@@ -3,14 +3,17 @@ package com.example.chatapp.Fragments;
 import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,6 +23,8 @@ import com.bumptech.glide.Glide;
 import com.example.chatapp.Adapters.OnItemClick;
 import com.example.chatapp.Adapters.UserAdapter;
 import com.example.chatapp.Adapters.chatAdapter;
+import com.example.chatapp.Login.Login;
+import com.example.chatapp.MainActivity;
 import com.example.chatapp.Model.Chatslist;
 import com.example.chatapp.Model.Users;
 import com.example.chatapp.Notifications.Token;
@@ -45,7 +50,7 @@ public class chatsFragment extends Fragment {
 
     private UserAdapter userAdapter;
     private List<Users> mUsers;
-    ImageView imageView;
+    ImageView imageView,notification;
 
     FirebaseUser fuser;
     DatabaseReference reference;
@@ -54,7 +59,7 @@ public class chatsFragment extends Fragment {
     static OnItemClick onItemClick;
 
 
-    public static chatsFragment newInstance(OnItemClick click) {
+    public static chatsFragment newInstance(OnItemClick click)  {
 
         onItemClick = click;
         Bundle args = new Bundle();
@@ -67,11 +72,20 @@ public class chatsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chats, container, false);
+        notification = view.findViewById(R.id.notification_icon);
+        notification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(),com.example.chatapp.notificationActivity.class);
+                startActivity(i);
+            }
+        });
 
 
 
         recyclerView = view.findViewById(R.id.chat_recyclerview_chatfrag);
         imageView = view.findViewById(R.id.image_user_userfrag);
+
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -109,10 +123,15 @@ public class chatsFragment extends Fragment {
         return view;
     }
 
+
+
     private void updateToken(String token){
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Tokens");
         Token token1 = new Token(token);
         reference.child(fuser.getUid()).setValue(token1);
+   }
+   public void navigateNotify(View view){
+       Toast.makeText(getActivity().getApplicationContext(), "helllo", Toast.LENGTH_SHORT).show();
    }
 
     private void chatList() {
@@ -157,5 +176,7 @@ public class chatsFragment extends Fragment {
             }
         });
     }
+
+
 
 }

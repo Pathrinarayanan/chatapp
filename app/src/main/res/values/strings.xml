@@ -103,6 +103,7 @@
     <string name="blocked">Blocked</string>
     <string name="profile">Profile</string>
     <string name="save">Save</string>
+    <string name="ok_text">ok</string>
 
     <string-array name="Settings">
         <item>Profile</item>

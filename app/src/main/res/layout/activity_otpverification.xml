@@ -4,74 +4,116 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
-    tools:context=".Login.OTPverification">
+    tools:context=".verifyotp">
 
-    <EditText
-        android:id="@+id/txtOTP"
-        android:layout_width="350dp"
-        android:layout_height="50dp"
-        android:background="#313131"
-        android:backgroundTint="#313131"
-        android:ems="10"
-        android:hint="@string/enter_otp"
-        android:inputType="text"
-        android:textColor="@color/white"
-        android:textColorHint="@color/black"
+
+    <TextView
+        android:id="@+id/textView15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat"
+        android:text="@string/xrosstalk"
+        android:textColor="#414141"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtOTPVerification"
-        app:layout_constraintVertical_bias="0.195"
-        tools:ignore="TextContrastCheck,DuplicateSpeakableTextCheck"
-        android:importantForAutofill="no" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.977"
+        tools:ignore="TextContrastCheck" />
+
+    <ImageView
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/back_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.041"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.042"
+        app:srcCompat="@drawable/back_button_24" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat"
+        android:text="@string/verification"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.427"
+        app:layout_constraintStart_toEndOf="@+id/back_button"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.034" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/filledTextField"
+        style="@style/TextInputLayout"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="9dp"
+        android:hint="@string/type"
+        android:textColorHint="@color/white"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:boxCornerRadiusTopStart="10dp"
+        app:cornerRadius="10dp"
+        app:hintTextColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView11"
+        app:layout_constraintVertical_bias="0">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txtOTP"
+            style="@style/TextInputEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/montserrat"
+            android:inputType="number"
+            android:maxLength="4"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            app:cornerRadius="10dp"
+            tools:ignore="TextContrastCheck" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="62dp"
+        android:fontFamily="@font/montserrat"
+        android:text="@string/enter_otp"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.14"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
         android:id="@+id/btnVerifyOTP"
-        android:layout_width="350dp"
-        android:layout_height="50dp"
-        android:backgroundTint="@color/xrossorange"
-        android:fontFamily="@font/montserrat"
+        android:layout_width="320dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="19dp"
         android:text="@string/verify"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textSize="22sp"
+        android:textStyle="bold"
+        app:cornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintHorizontal_bias="0.527"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtOTP"
-        app:layout_constraintVertical_bias="0.052"
-        tools:ignore="TextContrastCheck" />
+        app:layout_constraintTop_toBottomOf="@+id/filledTextField"
+        app:layout_constraintVertical_bias="0" />
 
-    <TextView
-        android:id="@+id/txtOTPVerification"
-        android:layout_width="153dp"
-        android:layout_height="30dp"
-        android:fontFamily="@font/montserrat"
-        android:text="@string/verification"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="25sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.062" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="105dp"
-        android:layout_height="24dp"
-        android:fontFamily="@font/montserrat"
-        android:text="@string/enter_otp"
-        android:textAlignment="textStart"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.098"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.213" />
 </androidx.constraintlayout.widget.ConstraintLayout>

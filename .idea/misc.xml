@@ -45,11 +45,15 @@
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/drawable/sadrightrightres.xml" value="0.125" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/drawable/textborder.xml" value="0.19166666666666668" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/font/montserrat.xml" value="0.1" />
+        <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/activity_blocked.xml" value="0.21666666666666667" />
+        <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/activity_editprofile.xml" value="0.21666666666666667" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/activity_explore.xml" value="0.1625" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/activity_login2.xml" value="0.264" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/activity_message.xml" value="0.2" />
+        <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/activity_notification.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/activity_otpverification.xml" value="0.1625" />
+        <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/activity_profile.xml" value="0.1" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/activity_register.xml" value="0.1794871794871795" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/activity_register2.xml" value="0.2357142857142857" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/activity_register3.xml" value="0.264" />
@@ -58,7 +62,7 @@
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/activity_settings.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/activity_splash_main.xml" value="0.11614583333333334" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/activity_splashs.xml" value="0.2287179487179487" />
-        <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/activity_user.xml" value="0.15520833333333334" />
+        <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/activity_user.xml" value="0.2" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/activity_welcome.xml" value="0.16944444444444445" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/angry.xml" value="0.10885416666666667" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/angry_right.xml" value="0.10885416666666667" />
@@ -74,18 +78,20 @@
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/empty_state.xml" value="0.10364583333333334" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/excited_left.xml" value="0.10885416666666667" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/excited_right.xml" value="0.10885416666666667" />
-        <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/fragment_chats.xml" value="0.264" />
+        <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/fragment_chats.xml" value="0.152" />
+        <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/fragment_connection_request.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/fragment_profile.xml" value="0.176" />
-        <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/fragment_selection.xml" value="0.140625" />
+        <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/fragment_selection.xml" value="0.152" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/fragment_splash1.xml" value="0.1" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/fragment_splash2.xml" value="0.21822916666666667" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/fragment_splash3.xml" value="0.21822916666666667" />
-        <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/fragment_users.xml" value="0.1359375" />
+        <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/fragment_users.xml" value="0.264" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/happy_left.xml" value="0.14791666666666667" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/happy_right.xml" value="0.14791666666666667" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/high_left.xml" value="0.10885416666666667" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/high_right.xml" value="0.10885416666666667" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/layoutofusers.xml" value="0.264" />
+        <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/register4_layout.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/romantic_left.xml" value="0.10885416666666667" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/romantic_right.xml" value="0.10885416666666667" />
         <entry key="..\:/Users/pathr/AndroidStudioProjects/chatApp/app/src/main/res/layout/sad_left.xml" value="0.7464285714285714" />

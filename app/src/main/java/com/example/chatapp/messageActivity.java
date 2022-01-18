@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -74,10 +75,9 @@ public class messageActivity extends AppCompatActivity {
     TextView usernameonToolbar;
     Toolbar toolbar;
     FirebaseUser firebaseUser;
-    TextView sendermessage, receivermessage;
 
     EditText et_message;
-    Button send;
+    ImageButton send;
     ImageView moodsetterBtn;
 
     DatabaseReference reference;
@@ -89,9 +89,6 @@ public class messageActivity extends AppCompatActivity {
     ValueEventListener seenlistener;
     APIService apiService;
     RelativeLayout leftchats;
-    RecyclerView barlay;
-    Layout layoutInflater;
-
     Boolean notify = false;
 
 

@@ -16,61 +16,17 @@
         <item name="itemBackground">@drawable/popup_menu</item>
         <item name="android:itemTextAppearance">@style/myCustomMenuTextAppearance</item>
         <item name="android:windowActivityTransitions">true</item>
-        <item name="textAppearanceButton">@style/TextAppearance.App.Button</item>
-    </style>
-    <style name="Button.Login" parent="ThemeOverlay.AppCompat">
-        <item name="colorAccent">@color/xrossorange</item>
-    </style>
-    <style name="myCustomMenuTextAppearance" parent="@android:style/TextAppearance.Widget.IconMenu.Item">
-        <item name="fontFamily">@font/montserrat</item>
-        <item name="android:textSize">12sp</item>
-    </style>
 
-    <style name="TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
-        <item name="boxStrokeColor">@color/black</item>
-        <item name="android:textColorHint">@color/black</item>
-        <item name="boxStrokeWidth">1dp</item>
     </style>
-
-    <style name="TextInputEditText" parent="ThemeOverlay.MaterialComponents.TextInputEditText.FilledBox.Dense">
-        <item name="android:textColor">@color/black</item>
-    </style>
-
-    <style name="AlertDialogTheme">
-        <item name="buttonBarPositiveButtonStyle">@style/Alert.Button.Positive</item>
-        <item name="buttonBarNeutralButtonStyle">@style/Alert.Button.Neutral</item>
-    </style>
-
-    <style name="Alert.Button.Positive" parent="Widget.MaterialComponents.Button.TextButton">
-        <item name="backgroundTint">@color/black</item>
-        <item name="rippleColor">@color/black</item>
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textAllCaps">false</item>
-    </style>
-
-    <style name="Alert.Button.Neutral" parent="Widget.MaterialComponents.Button.TextButton">
-        <item name="backgroundTint">@android:color/transparent</item>
-        <item name="rippleColor">@color/black</item>
-        <item name="android:textColor">@android:color/darker_gray</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-
-    <style name="Button">
-        <item name="cornerRadius">10dp</item>
-    </style>
-
-    <style name="searchViwStyle" parent="Widget.AppCompat.AutoCompleteTextView">
-        <item name="android:typeface">@font/montserrat</item>
-    </style>
-
     <style name="TextAppearance.App.Button" parent="TextAppearance.MaterialComponents.Button">
         <item name="fontFamily">@font/montserrat</item>
         <item name="android:fontFamily">@font/montserrat</item>
     </style>
-
-    <style name="TextAppearance.App.Button.happy" parent="TextAppearance.MaterialComponents.Button">
-        <item name="tabTextColor">#54B9C1</item>
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
+        ...
+        <item name="colorButtonNormal">@color/orange</item>
+        ...
     </style>
+
 
 </resources>

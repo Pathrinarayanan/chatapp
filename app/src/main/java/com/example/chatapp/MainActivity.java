@@ -8,14 +8,17 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
+import com.example.chatapp.Login.Login;
 import com.example.chatapp.Model.Users;
 import com.example.chatapp.Fragments.ProfileFragments;
 import com.example.chatapp.Fragments.UserFragments;
@@ -37,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     TextView username, profilename;
     DatabaseReference databaseReference;
     FirebaseUser firebaseuser;
+    ImageView notification;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolhome);
         imageView = findViewById(R.id.profile_image);
         username = findViewById(R.id.usernameonmainactivity);
-        profilename = findViewById(R.id.username_profile_frag);
+        //profilename = findViewById(R.id.username_profile_frag);
         TabLayout tabLayout = findViewById(R.id.tablayout);
         ViewPager viewpager = findViewById(R.id.viewPager);
 
@@ -63,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_baseline_flight_takeoff_24);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_baseline_chat_24);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_baseline_more);
-        tabLayout.getTabAt(0).getIcon().setColorFilter(getResources().getColor(android.R.color.holo_red_light), PorterDuff.Mode.SRC_IN);
+        tabLayout.getTabAt(0).getIcon().setColorFilter(getResources().getColor(android.R.color.holo_orange_dark), PorterDuff.Mode.SRC_IN);
         tabLayout.getTabAt(1).getIcon().setColorFilter(getResources().getColor(android.R.color.white), PorterDuff.Mode.SRC_IN);
         tabLayout.getTabAt(2).getIcon().setColorFilter(getResources().getColor(android.R.color.white), PorterDuff.Mode.SRC_IN);
 
@@ -71,7 +76,9 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                tab.getIcon().setColorFilter(getResources().getColor(android.R.color.holo_red_light), PorterDuff.Mode.SRC_IN);
+                tab.getIcon().setColorFilter(getResources().getColor(android.R.color.holo_orange_dark), PorterDuff.Mode.SRC_IN);
+
+
             }
 
             @Override

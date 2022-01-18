@@ -56,65 +56,71 @@ public class Register extends AppCompatActivity {
         btnSendOTP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                email = email_field.getText().toString();
+                email = email_field.getText().toString().trim();
+
 
 
                 if (TextUtils.isEmpty(email)) {
                     email_field.setError("Required");
                 }
+                try {
 
 
-                auth.fetchSignInMethodsForEmail(email)
-                        .addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
+                    auth.fetchSignInMethodsForEmail(email)
+                            .addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
 
-                                boolean isNewUser = task.getResult().getSignInMethods().isEmpty();
+                                    boolean isNewUser = task.getResult().getSignInMethods().isEmpty();
 
-                                if (isNewUser) {
-                                    Log.e("TAG", "Is New User!");
-                                    Random random = new Random();
+                                    if (isNewUser) {
+                                        Toast.makeText(Register.this,"Sending Email",Toast.LENGTH_SHORT).show();
+                                        Log.e("TAG", "Is New User!");
+                                        Random random = new Random();
 
-                                    int temp_code = random.nextInt(8999) + 1000;
+                                        int temp_code = random.nextInt(8999) + 1000;
 
-                                    code = Integer.toString(temp_code);
+                                        code = Integer.toString(temp_code);
 
-                                    String message_to_send = "Your otp is " + code;
-                                    Properties props = new Properties();
-                                    props.put("mail.smtp.auth", "true");
-                                    props.put("mail.smtp.starttls.enable", "true");
-                                    props.put("mail.smtp.host", "smtp.gmail.com");
-                                    props.put("mail.smtp.port", "587");
+                                        String message_to_send = "Your otp is " + code;
+                                        Properties props = new Properties();
+                                        props.put("mail.smtp.auth", "true");
+                                        props.put("mail.smtp.starttls.enable", "true");
+                                        props.put("mail.smtp.host", "smtp.gmail.com");
+                                        props.put("mail.smtp.port", "587");
 
-                                    Session session = Session.getInstance(props,
-                                            new Authenticator() {
-                                                @Override
-                                                protected PasswordAuthentication getPasswordAuthentication() {
-                                                    return new PasswordAuthentication(from_email, from_email_password);
-                                                }
-                                            });
-                                    try {
-                                        Message message = new MimeMessage(session);
-                                        message.setFrom(new InternetAddress(from_email));
-                                        message.setRecipient(Message.RecipientType.TO, new InternetAddress(email_field.getText().toString()));
-                                        message.setSubject("OTP VERIFICATION");
-                                        message.setText(message_to_send);
-                                        Transport.send(message);
-                                        Toast.makeText(getApplicationContext(), "Email sent", Toast.LENGTH_LONG).show();
-                                        Intent i = new Intent(Register.this, OTPverification.class);
-                                        i.putExtra("email", email);
-                                        i.putExtra("code", code);
-                                        startActivity(i);
-                                    } catch (MessagingException e) {
-                                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                                        Session session = Session.getInstance(props,
+                                                new Authenticator() {
+                                                    @Override
+                                                    protected PasswordAuthentication getPasswordAuthentication() {
+                                                        return new PasswordAuthentication(from_email, from_email_password);
+                                                    }
+                                                });
+                                        try {
+                                            Message message = new MimeMessage(session);
+                                            message.setFrom(new InternetAddress(from_email));
+                                            message.setRecipient(Message.RecipientType.TO, new InternetAddress(email_field.getText().toString()));
+                                            message.setSubject("OTP VERIFICATION");
+                                            message.setText(message_to_send);
+                                            Transport.send(message);
+                                            Toast.makeText(getApplicationContext(), "Email Sent", Toast.LENGTH_LONG).show();
+                                            Intent i = new Intent(Register.this, OTPverification.class);
+                                            i.putExtra("email", email);
+                                            i.putExtra("code", code);
+                                            startActivity(i);
+                                        } catch (MessagingException e) {
+                                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                                        }
+                                    } else {
+                                        Log.e("TAG", "Is Old User!");
+                                        Toast.makeText(getApplicationContext(), "User Already available please sign in", Toast.LENGTH_LONG).show();
                                     }
-                                } else {
-                                    Log.e("TAG", "Is Old User!");
-                                    Toast.makeText(getApplicationContext(), "User Already available please sign in", Toast.LENGTH_LONG).show();
-                                }
 
-                            }
-                        });
+                                }
+                            });
+                }catch (Exception e){
+                    Toast.makeText(Register.this, "Enter the valid email",Toast.LENGTH_SHORT ).show();
+                }
 
 
                 if (android.os.Build.VERSION.SDK_INT > 9) {
