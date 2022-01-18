@@ -65,6 +65,9 @@
             android:name=".editprofile"
             android:exported="false" />
         <activity
+            android:name=".Connections"
+            android:exported="false" />
+        <activity
             android:name=".notificationActivity"
             android:exported="false" />
         <activity
