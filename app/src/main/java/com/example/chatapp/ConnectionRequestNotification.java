@@ -1,35 +1,124 @@
-package com.example.chatapp;
+package  com.example.chatapp;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
+
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.chatapp.Adapters.OnItemClick;
+import com.example.chatapp.Adapters.SearchAdapter;
+import com.example.chatapp.Adapters.UserAdapter;
+import com.example.chatapp.Adapters.chatAdapter;
+import com.example.chatapp.Adapters.connectionReqAdapter;
+import com.example.chatapp.Model.Requests;
+import com.example.chatapp.Model.Users;
+import com.example.chatapp.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ConnectionRequestNotification extends Fragment {
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private RecyclerView recyclerView;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    FrameLayout frameLayout;
 
-    public ConnectionRequestNotification() {
-        // Required empty public constructor
-    }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    private UserAdapter userAdapter;
+    private SearchAdapter Searchadapter;
+    private List<Users> mUsers;
+    private List<Requests>mRequests;
+    static OnItemClick onItemClick;
+
+    EditText search_users;
+
+    public static ConnectionRequestNotification newInstance(OnItemClick click) {
+        onItemClick = click;
+        Bundle args = new Bundle();
+
+        ConnectionRequestNotification fragment = new ConnectionRequestNotification();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_connection_request, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_connection_request, container, false);
+
+
+        recyclerView = view.findViewById(R.id.connection_recyclerview);
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(dividerItemDecoration);
+
+        mRequests= new ArrayList<>();
+        searchUsers();
+
+        return view;
     }
+
+    private void searchUsers() {
+
+        final FirebaseUser fuser = FirebaseAuth.getInstance().getCurrentUser();
+       Query query = FirebaseDatabase.getInstance().getReference("Users").orderByChild("search");
+        Query query1 = FirebaseDatabase.getInstance().getReference("Requests").child(fuser.getUid()).orderByChild("search");
+
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                mRequests.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Requests req = snapshot.getValue(Requests.class);
+
+                    assert req != null;
+                    assert fuser != null;
+
+                        if (!req.getId().equals(fuser.getUid()) ) {
+                            mRequests.add(req);
+                        }
+
+                }
+
+                //userAdapter = new UserAdapter(getContext(),onItemClick, mUsers, false);
+                connectionReqAdapter adapter = new connectionReqAdapter(getContext(),onItemClick,mRequests,false);
+                recyclerView.setAdapter(adapter);
+                //  recyclerView.setAdapter(userAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+
+
 }

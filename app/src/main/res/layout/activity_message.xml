@@ -112,6 +112,7 @@
                 android:inputType="textMultiLine|textLongMessage"
                 android:maxLength ="2000"
                 android:paddingStart="16dp"
+                android:textCursorDrawable="@color/white"
                 android:paddingTop="8dp"
                 android:paddingBottom="6dp"
                 android:paddingEnd="8dp"

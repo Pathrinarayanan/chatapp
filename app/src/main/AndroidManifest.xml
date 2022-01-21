@@ -11,6 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ChatApp">
         <activity
+            android:name=".connectionsMain"
+            android:exported="true" />
+        <activity
             android:name=".Register4"
             android:exported="true" />
         <activity
@@ -41,11 +44,10 @@
         <activity
             android:name=".Login.ForgotPassword"
             android:exported="false" />
-        <activity android:name=".settings_nav"
+        <activity
+            android:name=".settings_nav"
             android:exported="false"
-            android:parentActivityName=".MainActivity">
-
-        </activity>
+            android:parentActivityName=".MainActivity"></activity>
         <activity
             android:name=".Login.OTPverification"
             android:exported="false" />
@@ -63,9 +65,6 @@
             android:exported="false" />
         <activity
             android:name=".editprofile"
-            android:exported="false" />
-        <activity
-            android:name=".Connections"
             android:exported="false" />
         <activity
             android:name=".notificationActivity"

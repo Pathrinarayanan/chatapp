@@ -57,16 +57,6 @@
         android:visibility="gone" />
 
 
-    <TextView
-        android:id="@+id/lastMessage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/username_userfrag"
-        android:layout_marginLeft="60dp"
-        android:layout_marginTop="2dp"
-        android:text="Message"
-        android:textSize="15sp"
-        android:textStyle="italic" />
 
     <Button
         android:id="@+id/follow"
@@ -75,9 +65,20 @@
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="17dp"
         android:background="@drawable/mybutton"
-        android:text="connect"
-        android:textColor="@color/black"
+        android:text="connect+"
+        android:textColor="@color/white"
         android:visibility="visible" />
+
+    <Button
+        android:id="@+id/decline"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="150dp"
+        android:background="@drawable/mybutton"
+        android:text="decline"
+        android:textColor="@color/white"
+        android:visibility="gone" />
 
 
 </RelativeLayout>

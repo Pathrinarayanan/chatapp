@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.chatapp.Fragments.Connection;
 import com.example.chatapp.Model.Users;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -34,7 +35,7 @@ public class Profile extends AppCompatActivity {
         mprofileconnections.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Profile.this,Connections.class);
+                Intent intent = new Intent(Profile.this, connectionsMain.class);
                 startActivity(intent);
             }
         });
