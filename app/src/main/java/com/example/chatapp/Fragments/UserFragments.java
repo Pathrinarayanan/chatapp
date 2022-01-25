@@ -22,8 +22,10 @@ import com.example.chatapp.Adapters.OnItemClick;
 import com.example.chatapp.Adapters.SearchAdapter;
 import com.example.chatapp.Adapters.UserAdapter;
 import com.example.chatapp.Adapters.chatAdapter;
+import com.example.chatapp.ChatRequest;
 import com.example.chatapp.Model.Users;
 import com.example.chatapp.R;
+import com.example.chatapp.chatReqAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -51,14 +53,15 @@ public class UserFragments extends Fragment {
 
     EditText search_users;
 
-    public static UserFragments newInstance(OnItemClick click) {
-        onItemClick = click;
-        Bundle args = new Bundle();
+//    public static UserFragments newInstance(OnItemClick click) {
+//        onItemClick = click;
+//        Bundle args = new Bundle();
+//
+//        UserFragments fragment = new UserFragments();
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
 
-        UserFragments fragment = new UserFragments();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,6 +77,7 @@ public class UserFragments extends Fragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(dividerItemDecoration);
 
+
         mUsers = new ArrayList<>();
 
 
@@ -82,7 +86,7 @@ public class UserFragments extends Fragment {
         search_users.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                readUsers();
+                searchUsers(charSequence.toString().toLowerCase());
             }
 
             @Override
@@ -156,8 +160,8 @@ public class UserFragments extends Fragment {
                         frameLayout.setVisibility(View.VISIBLE);
                     }
 
-                    userAdapter = new UserAdapter(getContext(), onItemClick,mUsers, false);
-                    recyclerView.setAdapter(userAdapter);
+                    chatReqAdapter adapter = new chatReqAdapter(getContext(), onItemClick,mUsers, false);
+                    recyclerView.setAdapter(adapter);
                 }
             }
 

@@ -77,7 +77,7 @@ public class ConnectionRequestNotification extends Fragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(dividerItemDecoration);
 
-        mRequests= new ArrayList<>();
+        mUsers= new ArrayList<>();
         searchUsers();
 
         return view;
@@ -89,24 +89,25 @@ public class ConnectionRequestNotification extends Fragment {
        Query query = FirebaseDatabase.getInstance().getReference("Users").orderByChild("search");
         Query query1 = FirebaseDatabase.getInstance().getReference("Requests").child(fuser.getUid()).orderByChild("search");
 
-        query.addValueEventListener(new ValueEventListener() {
+        query1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                mRequests.clear();
+               mUsers.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Requests req = snapshot.getValue(Requests.class);
+                    Users req = snapshot.getValue(Users.class);
 
                     assert req != null;
                     assert fuser != null;
 
-                        if (!req.getId().equals(fuser.getUid()) ) {
-                            mRequests.add(req);
+                        if (req.getId().equals(fuser.getUid()) ) {
+                            mUsers.add(req);
                         }
 
                 }
 
                 //userAdapter = new UserAdapter(getContext(),onItemClick, mUsers, false);
-                connectionReqAdapter adapter = new connectionReqAdapter(getContext(),onItemClick,mRequests,false);
+
+               connectionReqAdapter adapter = new connectionReqAdapter(getContext(),onItemClick,mUsers,false);
                 recyclerView.setAdapter(adapter);
                 //  recyclerView.setAdapter(userAdapter);
             }

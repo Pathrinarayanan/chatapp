@@ -152,7 +152,7 @@ public class chatsFragment extends Fragment {
                         }
                     }else {
 
-                            Glide.with(getApplicationContext()).load(user.getImageURL()).into(imageView);
+                           // Glide.with(getApplicationContext()).load(user.getImageURL()).into(imageView);
 
                         }
 

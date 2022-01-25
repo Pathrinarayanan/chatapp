@@ -29,7 +29,7 @@ public class UserActivity extends AppCompatActivity {
     private Button create_account;
     private EditText username_field, password_field;
     String tag_value, email, username, password;
-  //  int[] btn_id = {R.id.tag1, R.id.tag2, R.id.tag3, R.id.tag4, R.id.tag5, R.id.tag6, R.id.tag7, R.id.tag8, R.id.tag9};
+   int[] btn_id = {R.id.tag1, R.id.tag2, R.id.tag3, R.id.tag4, R.id.tag5, R.id.tag6, R.id.tag7, R.id.tag8, R.id.tag9};
     private FirebaseAuth mAuth;
     FirebaseUser user;
     FirebaseDatabase db;
@@ -44,19 +44,22 @@ public class UserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user);
 
         Intent intent = getIntent();
+        for (int i = 0; i< btn_id.length; i++)
+        {
+            tag_btn[i] = (Button) findViewById(btn_id[i]);
+        }
+
 
         username_field = findViewById(R.id.txtUsername);
         create_account = findViewById(R.id.btnCreateAccount);
         password_field = findViewById(R.id.txtPassword);
+        selected_tag = findViewById(R.id.selectedtag);
+     //   ButtononClick(View v);
 
         reference = FirebaseDatabase.getInstance().getReference();
 
         email = intent.getStringExtra("email");
         mAuth = FirebaseAuth.getInstance();
-
-//        for (int i = 0; i < btn_id.length; i++) {
-//            tag_btn[i] = (Button) findViewById(btn_id[i]);
-//        }
 
         create_account.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,59 +87,60 @@ public class UserActivity extends AppCompatActivity {
         });
     }
 
-    public void change_tag_value() {
+    public void change_tag_value()
+    {
         selected_tag.setText(tag_value);
     }
 
-//    public void ButtononClick(View v) {
-//        switch (v.getId()) {
-//            case R.id.tag1:
-//                tag_value = tag_btn[0].getText().toString();
-//                change_tag_value();
-//                break;
-//
-//            case R.id.tag2:
-//                tag_value = tag_btn[1].getText().toString();
-//                change_tag_value();
-//                break;
-//
-//            case R.id.tag3:
-//                tag_value = tag_btn[2].getText().toString();
-//                change_tag_value();
-//                break;
-//
-//            case R.id.tag4:
-//                tag_value = tag_btn[3].getText().toString();
-//                change_tag_value();
-//                break;
-//
-//            case R.id.tag5:
-//                tag_value = tag_btn[4].getText().toString();
-//                change_tag_value();
-//                break;
-//
-//            case R.id.tag6:
-//                tag_value = tag_btn[5].getText().toString();
-//                change_tag_value();
-//                break;
-//
-//            case R.id.tag7:
-//                tag_value = tag_btn[6].getText().toString();
-//                change_tag_value();
-//                break;
-//
-//            case R.id.tag8:
-//                tag_value = tag_btn[7].getText().toString();
-//                change_tag_value();
-//                break;
-//
-//            case R.id.tag9:
-//                tag_value = tag_btn[8].getText().toString();
-//                change_tag_value();
-//                break;
-//
-//        }
-//    }
+    public void ButtononClick(View v) {
+        switch (v.getId()) {
+            case R.id.tag1:
+                tag_value = tag_btn[0].getText().toString();
+                change_tag_value();
+                break;
+
+            case R.id.tag2:
+                tag_value = tag_btn[1].getText().toString();
+                change_tag_value();
+                break;
+
+            case R.id.tag3:
+                tag_value = tag_btn[2].getText().toString();
+                change_tag_value();
+                break;
+
+            case R.id.tag4:
+                tag_value = tag_btn[3].getText().toString();
+                change_tag_value();
+                break;
+
+            case R.id.tag5:
+                tag_value = tag_btn[4].getText().toString();
+                change_tag_value();
+                break;
+
+            case R.id.tag6:
+                tag_value = tag_btn[5].getText().toString();
+                change_tag_value();
+                break;
+
+            case R.id.tag7:
+                tag_value = tag_btn[6].getText().toString();
+                change_tag_value();
+                break;
+
+            case R.id.tag8:
+                tag_value = tag_btn[7].getText().toString();
+                change_tag_value();
+                break;
+
+            case R.id.tag9:
+                tag_value = tag_btn[8].getText().toString();
+                change_tag_value();
+                break;
+
+        }
+    }
 
     private void registerUser(final String username, String password, final String email) {
 
@@ -159,22 +163,19 @@ public class UserActivity extends AppCompatActivity {
                         hashMap.put("id", user.getUid());
                         hashMap.put("imageURL", "default");
                         hashMap.put("status", "offline");
+                        hashMap.put("tag",tag_value);
                         hashMap.put("search", username.toLowerCase());
+                        HashMap<String, Object> newhashMap=new HashMap<>();
+                        newhashMap.put("key",hashMap);
+
+                        Intent intent = new Intent(UserActivity.this, com.example.chatapp.Register4.class);
+                        intent.putExtra("hashMapKey", newhashMap);
+
+                        startActivity(intent);
+
+                       // startActivity(new Intent(UserActivity.this, com.example.chatapp.Register4.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
 
 
-                        reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-
-
-                                if (task.isSuccessful()) {
-
-                                    Toast.makeText(UserActivity.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
-
-                                    startActivity(new Intent(UserActivity.this, com.example.chatapp.Register4.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
-                                }
-                            }
-                        });
                     }
 
                 }

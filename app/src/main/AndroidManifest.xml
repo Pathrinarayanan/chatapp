@@ -73,8 +73,12 @@
             android:name=".Login.Login"
             android:exported="false" />
         <activity
+            android:name=".Tags"
+            android:exported="false" />
+        <activity
             android:name=".Login.Register"
             android:exported="false" />
+
 
         <service
             android:name=".Notifications.MyFirebaseIdService"

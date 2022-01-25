@@ -25,6 +25,7 @@ public class ProfileFragments extends Fragment  {
     ConstraintLayout logout;
     ConstraintLayout mprofile;
     ConstraintLayout mblocked;
+    ConstraintLayout mtags;
 
 
 
@@ -36,10 +37,19 @@ public class ProfileFragments extends Fragment  {
         logout = (ConstraintLayout) rootview.findViewById(R.id.logoutmenu);
         mprofile = (ConstraintLayout) rootview.findViewById(R.id.profile);
         mblocked = (ConstraintLayout) rootview.findViewById(R.id.blocked);
+        mtags = (ConstraintLayout)rootview.findViewById(R.id.tag_settings);
         mprofile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i=new Intent(getActivity(), com.example.chatapp.Profile.class);
+                startActivity(i);
+            }
+        });
+        mtags.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(getActivity(), com.example.chatapp.
+                        Tags.class);
                 startActivity(i);
             }
         });

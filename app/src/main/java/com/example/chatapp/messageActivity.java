@@ -687,7 +687,7 @@ public class messageActivity extends AppCompatActivity {
 
     }
 
-    private void sendMessage(final String myid, final String friendid, final String message) {
+    public void sendMessage(final String myid, final String friendid, final String message) {
 
 
          DatabaseReference reference = FirebaseDatabase.getInstance().getReference();

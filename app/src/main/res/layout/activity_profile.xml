@@ -20,7 +20,7 @@
         app:cornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profilename"
+        app:layout_constraintTop_toBottomOf="@+id/profilenamevalue"
         app:strokeColor="@color/reformer"
         app:strokeWidth="2dp"
         tools:ignore="TouchTargetSizeCheck"
@@ -41,7 +41,7 @@
         app:srcCompat="@drawable/group_556" />
 
     <ImageView
-        android:id="@+id/imageView8"
+        android:id="@+id/image_profile"
         android:layout_width="160dp"
         android:layout_height="160dp"
         android:scaleType="fitCenter"
@@ -93,7 +93,7 @@
         app:srcCompat="@drawable/write" />
 
     <TextView
-        android:id="@+id/profilename"
+        android:id="@+id/profilenamevalue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="332dp"
@@ -137,7 +137,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView13"
+            android:id="@+id/aboutprofile"
             android:layout_width="354dp"
             android:layout_height="120dp"
             android:fontFamily="@font/montserrat"
@@ -176,7 +176,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:id="@+id/textView21"
+                android:id="@+id/profilepopularity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
@@ -194,7 +194,7 @@
                 app:layout_constraintVertical_bias="0.0" />
 
             <TextView
-                android:id="@+id/textView20"
+                android:id="@+id/popularity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"

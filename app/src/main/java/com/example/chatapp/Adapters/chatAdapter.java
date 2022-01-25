@@ -67,7 +67,7 @@ public class chatAdapter extends RecyclerView.Adapter<chatAdapter.ViewHolder> {
 
         holder.username.setText(user.getUsername());
         if (user.getId().equals(firebaseUser.getUid())){
-            holder.btn_follow.setVisibility(View.GONE);
+        //    holder.btn_follow.setVisibility(View.GONE);
         }
 
         if (user.getImageURL().equals("default")){

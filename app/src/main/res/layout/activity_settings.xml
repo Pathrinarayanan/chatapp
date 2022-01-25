@@ -25,10 +25,11 @@
 
     <Button
         android:id="@+id/registerbtn"
-        android:background="@color/orange"
-        android:layout_width="370dp"
-        android:layout_height="wrap_content"
+        android:layout_width="346dp"
+        android:layout_height="48dp"
+        android:background="@drawable/mybutton"
         android:text="@string/share_app"
+        android:theme="@style/Theme.ChatApp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.487"
@@ -125,6 +126,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
+            android:id="@+id/tag_settings"
             android:paddingBottom="15dp">
 
             <ImageView

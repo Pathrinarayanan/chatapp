@@ -47,9 +47,10 @@
             android:layout_height="match_parent"
             android:fontFamily="@font/montserrat"
             android:textAlignment="textStart"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textColorHint="@color/black"
             android:textSize="18sp"
+            android:id="@+id/profileaddabout"
             app:cornerRadius="10dp"
             tools:ignore="TextContrastCheck,SpeakableTextPresentCheck">
 
@@ -148,8 +149,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.977" />
 
-    <ImageView
-        android:id="@+id/imageView3"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profileaddimage"
         android:layout_width="180dp"
         android:layout_height="180dp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView2"

@@ -5,20 +5,35 @@ public class Users {
     String imageURL;
     String id;
     String search;
+    String frid;
 
 
     String status;
 
-    public Users(String username, String imageURL, String id, String status ,String search) {
+    public Users(String username, String imageURL, String id, String status ,String search,String frid) {
         this.username = username;
         this.imageURL = imageURL;
         this.id = id;
         this.status = status;
         this.search = search;
+        this.frid = frid;
     }
     public Users(){
 
     }
+
+
+
+    public String getFrid() {
+        return frid;
+    }
+
+    public void setFrid(String frid) {
+        this.frid = frid;
+    }
+
+
+
 
     public String getUsername() {
         return username;
