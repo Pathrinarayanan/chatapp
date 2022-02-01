@@ -2,10 +2,20 @@ package com.example.chatapp.Model;
 
 public class Users {
     String username;
-    String imageURL;
+   String imageURL;
     String id;
     String search;
     String frid;
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
+    String tag;
 
 
     String status;

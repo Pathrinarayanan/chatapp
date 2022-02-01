@@ -1,7 +1,5 @@
 package com.example.chatapp.Fragments;
 
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,18 +11,14 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.chatapp.Adapters.OnItemClick;
 import com.example.chatapp.Adapters.UserAdapter;
 import com.example.chatapp.Adapters.chatAdapter;
-import com.example.chatapp.Login.Login;
-import com.example.chatapp.MainActivity;
 import com.example.chatapp.Model.Chatslist;
 import com.example.chatapp.Model.Users;
 import com.example.chatapp.Notifications.Token;
@@ -167,6 +161,7 @@ public class chatsFragment extends Fragment {
 
 
                 chatAdapter chatadapter = new chatAdapter(getContext(), onItemClick,mUsers, true);
+
                 recyclerView.setAdapter(chatadapter);
             }
 

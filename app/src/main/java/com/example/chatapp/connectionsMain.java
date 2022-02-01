@@ -5,10 +5,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
 
-import com.example.chatapp.Adapters.SimpleFragment;
 import com.example.chatapp.Adapters.connectionAdapter;
-import com.example.chatapp.Fragments.Connection;
-
 
 
 public class connectionsMain

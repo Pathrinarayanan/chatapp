@@ -2,8 +2,11 @@ package com.example.chatapp.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.Typeface;
 
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,8 +40,9 @@ public class chatAdapter extends RecyclerView.Adapter<chatAdapter.ViewHolder> {
     private boolean ischat;
     private OnItemClick onItemClick;
     private FirebaseUser firebaseUser;
-
-    Typeface MR,MRR;
+    private com.example.chatapp.Login.ColorGetter colorGetter;
+    TextView txttag;
+    private  String tagColor;
     String theLastMessage;
 
     public chatAdapter(Context mContext, OnItemClick onItemClick, List<Users> mUsers, boolean ischat){
@@ -55,6 +59,7 @@ public class chatAdapter extends RecyclerView.Adapter<chatAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.layout_of_chatusers, parent, false);
+        txttag = view.findViewById(R.id.txttagonlayouts);
         return new chatAdapter.ViewHolder(view);
     }
 
@@ -63,6 +68,10 @@ public class chatAdapter extends RecyclerView.Adapter<chatAdapter.ViewHolder> {
 
         final Users user = mUsers.get(position);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        colorGetter = new com.example.chatapp.Login.ColorGetter();
+        holder.txttag.setText(user.getTag());
+        tagColor = colorGetter.getColor(user.getTag());
+        setColor();
 
 
         holder.username.setText(user.getUsername());
@@ -132,6 +141,7 @@ public class chatAdapter extends RecyclerView.Adapter<chatAdapter.ViewHolder> {
         private ImageView img_off;
         private TextView last_msg;
         public Button btn_follow;
+        public TextView txttag;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -142,6 +152,7 @@ public class chatAdapter extends RecyclerView.Adapter<chatAdapter.ViewHolder> {
             img_off = itemView.findViewById(R.id.image_offline);
             last_msg = itemView.findViewById(R.id.lastMessage);
             btn_follow = itemView.findViewById(R.id.follow);
+            txttag = itemView.findViewById(R.id.txttagonlayouts);
         }
     }
 
@@ -183,5 +194,15 @@ public class chatAdapter extends RecyclerView.Adapter<chatAdapter.ViewHolder> {
             }
         });
     }
+    private void setColor() {
+        txttag.setTextColor(Color.parseColor(tagColor));
+        GradientDrawable myGrad = (GradientDrawable)txttag.getBackground();
+        myGrad.setStroke(convertDpToPx(2), Color.parseColor(tagColor));
+    }
+    private int convertDpToPx(int dp){
+        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+    }
+
+
 
 }

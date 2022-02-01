@@ -73,6 +73,7 @@ public class UserFragments extends Fragment {
         recyclerView = view.findViewById(R.id.recycler_view);
 
         recyclerView.setHasFixedSize(true);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(dividerItemDecoration);
@@ -156,9 +157,9 @@ public class UserFragments extends Fragment {
                         }
                     }
 
-                    if(mUsers.size()==0){
-                        frameLayout.setVisibility(View.VISIBLE);
-                    }
+//                    if(mUsers.size()==0){
+//                        frameLayout.setVisibility(View.VISIBLE);
+//                    }
 
                     chatReqAdapter adapter = new chatReqAdapter(getContext(), onItemClick,mUsers, false);
                     recyclerView.setAdapter(adapter);

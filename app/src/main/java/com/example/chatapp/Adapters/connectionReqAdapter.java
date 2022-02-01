@@ -37,6 +37,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 public class connectionReqAdapter extends RecyclerView.Adapter<connectionReqAdapter.ViewHolder> {
 
@@ -51,7 +52,7 @@ public class connectionReqAdapter extends RecyclerView.Adapter<connectionReqAdap
     private FirebaseUser firebaseUser;
     String usernames, imageurls;
     int row_index =-1;
-     String current_state = "he_sent_pending";
+    public String current_state = "he_sent_pending";
 
 
     public connectionReqAdapter(Context mContext, OnItemClick onItemClick, List<Users> mUsers, boolean ischat){
@@ -92,9 +93,7 @@ public class connectionReqAdapter extends RecyclerView.Adapter<connectionReqAdap
 
 
         holder.username.setText(user.getUsername());
-        if(user.getStatus().equals("pending")){
 
-        }
         if (user.getImageURL().equals("default")){
             holder.profile_image.setImageResource(drawable.user);
         } else {
@@ -115,78 +114,28 @@ public class connectionReqAdapter extends RecyclerView.Adapter<connectionReqAdap
                 }
             }
         });
-        friendreference.child(firebaseUser.getUid()).child(user.getId()).addValueEventListener(new ValueEventListener() {
+        current_state = "he_sent_pending";
+
+        btn_follow.setText("accept");
+        btn_decline.setVisibility(View.VISIBLE);
+        holder.btn_decline.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    current_state = "friend";
-
-                    holder. btn_follow.setText("connected");
-                    holder.btn_follow.setBackground(mContext.getDrawable(drawable.mybutton));
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-        friendreference.child(user.getId()).child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    current_state = "friend";
-                    holder.btn_follow.setText("connected");
-                    holder.btn_follow.setBackground(mContext.getDrawable(drawable.mybutton));
-                    holder.btn_decline.setVisibility(View.GONE);
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-        reqreference.child(user.getId()).child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    if(snapshot.child("status").getValue().toString().equals("pending")){
-                        current_state = "I_sent_pending";
-                        holder.btn_follow.setText("Requested");
-                        holder.btn_follow.setBackground(mContext.getDrawable(drawable.bluebutton));
-
+            public void onClick(View view) {
+                reqreference.child(firebaseUser.getUid()).child(user.getFrid()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            Toast.makeText(mContext.getApplicationContext(), "You have cancelled Friend Request",Toast.LENGTH_SHORT).show();
+                            current_state = "nothing_happend";
+                            btn_follow.setText("connect+");
+                            btn_follow.setBackground(mContext.getDrawable(drawable.mybutton));
+                        }
+                        else{
+                            Toast.makeText(mContext.getApplicationContext(),""+ task.getException().toString(),Toast.LENGTH_SHORT).show();
+                        }
                     }
-                    if(snapshot.child("status").getValue().toString().equals("decline")){
-                        current_state = "I_sent_decline";
-                        holder. btn_follow.setText("Requested");
-                        holder.btn_follow.setBackground(mContext.getDrawable(drawable.bluebutton));
-                    }
-                }
-            }
+                });
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-        reqreference.child(firebaseUser.getUid()).child(user.getId()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    if(snapshot.child("status").getValue().toString().equals("pending")){
-                        current_state = "he_sent_pending";
-
-                        btn_follow.setText("accept");
-                        btn_decline.setVisibility(View.VISIBLE);
-
-
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
@@ -255,28 +204,78 @@ public class connectionReqAdapter extends RecyclerView.Adapter<connectionReqAdap
                     });
                 }
                 if(current_state.equals("he_sent_pending")){
-                    reqreference.child(firebaseUser.getUid()).child(user.getId()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    reqreference.child(firebaseUser.getUid()).child(user.getFrid()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()){
                                 HashMap hashMap = new HashMap();
+                                hashMap.put("id",firebaseUser.getUid());
+                                hashMap.put("search",user.getUsername().toLowerCase());
                                 hashMap.put("status","friend");
                                 hashMap.put("username",user.getUsername());
-                                hashMap.put("imageUrl",user.getImageURL());
+                                hashMap.put("imageURL",user.getImageURL());
+                                hashMap.put("frid",user.getFrid());
+
+                                HashMap hashMap2= new HashMap();
+                                hashMap2.put("id",user.getFrid());
+                                hashMap2.put("search",user.getUsername().toLowerCase());
+                                hashMap2.put("status","friend");
+                                hashMap2.put("username",user.getUsername());
+                                hashMap2.put("imageURL",user.getImageURL());
+                                hashMap2.put("frid",firebaseUser.getUid());
+
                                 btn_follow.setVisibility(View.VISIBLE);
-                                friendreference.child(firebaseUser.getUid()).child(user.getId()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
+                                friendreference.child(firebaseUser.getUid()).child(user.getFrid()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
                                     @Override
                                     public void onComplete(@NonNull Task task) {
                                         if(task.isSuccessful()){
-                                            friendreference.child(user.getId()).child(firebaseUser.getUid()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
+
+                                            friendreference.child(user.getFrid()).child(firebaseUser.getUid()).updateChildren(hashMap2).addOnCompleteListener(new OnCompleteListener() {
                                                 @Override
                                                 public void onComplete(@NonNull Task task) {
+                                                    final DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("Chatslist").child(user.getFrid()).child(user.getId());
+
+                                                    reference1.addValueEventListener(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+
+                                                            if (!snapshot.exists()) {
+                                                                reference1.child("id").setValue(user.getId());
+                                                            }
+
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                                        }
+                                                    });
+                                                    final DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference("Chatslist").child(user.getId()).child(user.getFrid());
+
+                                                    reference2.addValueEventListener(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+
+                                                            if (!snapshot.exists()) {
+                                                                reference2.child("id").setValue(user.getFrid());
+                                                            }
+
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                                        }
+                                                    });
 
                                                     for(int i =0;i<mUsers.size();i++){
                                                         if(i == row_index){
                                                             Toast.makeText(mContext.getApplicationContext(), "You added as a Connection",Toast.LENGTH_SHORT).show();
                                                             current_state = "friend";
                                                             holder.btn_follow.setText("Connected");
+                                                            holder.btn_decline.setVisibility(View.GONE);
                                                         }
                                                     }
 
@@ -293,7 +292,7 @@ public class connectionReqAdapter extends RecyclerView.Adapter<connectionReqAdap
                     //
                 }
             }
-        });checkuserExistance(user.getId());
+        });
     }
 
     private void checkuserExistance(String id) {

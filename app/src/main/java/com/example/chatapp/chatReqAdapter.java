@@ -5,8 +5,11 @@ import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.Typeface;
 
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +23,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.chatapp.Adapters.OnItemClick;
+import com.example.chatapp.Fragments.APIService;
 import com.example.chatapp.Model.Chats;
 import com.example.chatapp.Model.Requests;
 import com.example.chatapp.Model.Users;
+import com.example.chatapp.Notifications.Client;
+import com.example.chatapp.Notifications.Data;
+import com.example.chatapp.Notifications.MyResponse;
+import com.example.chatapp.Notifications.Sender;
+import com.example.chatapp.Notifications.Token;
 import com.example.chatapp.R;
 import com.example.chatapp.R.drawable;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -33,10 +42,17 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class chatReqAdapter extends RecyclerView.Adapter<chatReqAdapter.ViewHolder> {
 
@@ -53,7 +69,14 @@ public class chatReqAdapter extends RecyclerView.Adapter<chatReqAdapter.ViewHold
     String usernames, imageurls;
     TextView say_hi_view;
     int row_index=-1;
-    public String current_states = "nothing_happend";
+    private  String tagColor;
+    APIService apiService;
+    private com.example.chatapp.Login.ColorGetter colorGetter;
+    public  String friendid;
+    CircleImageView profile_image;
+    TextView txttag;
+    String current_states[] = new String[1000] ;
+
 
 
     public chatReqAdapter(Context mContext, OnItemClick onItemClick, List<Users> mUsers, boolean ischat){
@@ -75,7 +98,10 @@ public class chatReqAdapter extends RecyclerView.Adapter<chatReqAdapter.ViewHold
         mreference = FirebaseDatabase.getInstance().getReference();
         btn_follow = view.findViewById(id.say_hi_btn);
         btn_decline = view.findViewById(id.ignore_chat);
+        profile_image= view.findViewById(id.image_user_userfrag);
         say_hi_view=  view.findViewById(id.say_hi_user);
+        txttag = view.findViewById(id.txttagonlayouts);
+        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
         return new chatReqAdapter.ViewHolder(view);
     }
 
@@ -84,23 +110,21 @@ public class chatReqAdapter extends RecyclerView.Adapter<chatReqAdapter.ViewHold
 
         Users user = mUsers.get(position);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        for(int i=0;i<mUsers.size();i++){
+            current_states[i] =   "nothing_happend";
+        }
+        colorGetter = new com.example. chatapp.Login.ColorGetter();
+        holder.txttag.setText(user.getTag());
+        tagColor = colorGetter.getColor(user.getTag());
+        setColor();
 
 
         holder.username.setText(user.getUsername());
-        if(user.getStatus().equals("pending")){
-            current_states ="I_sent_pending";
-        }
-        else if(user.getStatus().equals("")){
-            current_states ="friend";
-        }
-        else{
-            current_states = "nothing_happend";
-        }
-        if (user.getImageURL().equals("default")){
-            holder.profile_image.setImageResource(drawable.user);
-        } else {
-            Glide.with(mContext).load(user.getImageURL()).into(holder.profile_image);
-        }
+        friendid = user.getFrid();
+
+        Picasso.with(mContext.getApplicationContext()).load(user.getImageURL().toString()).resize(160,160).into(holder.profile_image);
+            //Glide.with(mContext).load(user.getImageURL()).into(holder.profile_image);
+
         mreference.child("Users").child(firebaseUser.getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -110,24 +134,23 @@ public class chatReqAdapter extends RecyclerView.Adapter<chatReqAdapter.ViewHold
                 else {
 
                     usernames= task.getResult().child("username").getValue().toString();
-                    imageurls = task.getResult().child("imageURL").getValue().toString();
+                   imageurls = task.getResult().child("imageURL").getValue().toString();
 
 
                 }
             }
         });
-        if(user.getStatus().equals("pending")){
-            current_states ="he_sent_pending";
-        }
+
         reqreference.child(firebaseUser.getUid()).child(user.getId()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
                     if(snapshot.child("status").getValue().toString().equals("pending")){
-                        current_states = "he_sent_pending";
+                        current_states[holder.getAdapterPosition()] = "he_sent_pending";
 
-                        holder.say_hi_view.setText("accept");
-                        holder.btn_decline.setVisibility(View.VISIBLE);
+                        holder.say_hi_view.setText("pending");
+
+                     //   holder.btn_decline.setVisibility(View.VISIBLE);
 
 
                     }
@@ -143,7 +166,7 @@ public class chatReqAdapter extends RecyclerView.Adapter<chatReqAdapter.ViewHold
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    current_states = "friend";
+                    current_states[holder.getAdapterPosition()] = "friend";
                     holder.say_hi_view.setText("connected");
                    holder. btn_decline.setVisibility(View.GONE);
                 }
@@ -158,7 +181,7 @@ public class chatReqAdapter extends RecyclerView.Adapter<chatReqAdapter.ViewHold
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    current_states = "friend";
+                    current_states[holder.getAdapterPosition()] = "friend";
 
                     holder.say_hi_view.setText("connected");
                 }
@@ -175,11 +198,11 @@ public class chatReqAdapter extends RecyclerView.Adapter<chatReqAdapter.ViewHold
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
                     if(snapshot.child("status").getValue().toString().equals("pending")){
-                        current_states = "I_sent_pending";
+                        current_states[holder.getAdapterPosition()] = "I_sent_pending";
                         holder.say_hi_view.setText("Requested");
                     }
                     if(snapshot.child("status").getValue().toString().equals("decline")){
-                        current_states = "I_sent_decline";
+                        current_states[holder.getAdapterPosition()] = "I_sent_decline";
                        holder. say_hi_view.setText("Requested");
                     }
                 }
@@ -190,6 +213,37 @@ public class chatReqAdapter extends RecyclerView.Adapter<chatReqAdapter.ViewHold
 
             }
         });
+        if(holder.say_hi_view.getText().toString().equals("accept")){
+            current_states [holder.getAdapterPosition()] = "he_sent_pending";
+        }
+        if(holder.say_hi_view.getText().toString().equals("connected")){
+            current_states[holder.getAdapterPosition()] = "friend";
+        }
+
+        holder.btn_decline.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+             //   Toast.makeText(mContext.getApplicationContext(),""+current_states,Toast.LENGTH_SHORT).show();
+                reqreference.child(user.getId()).child(user.getFrid()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            Toast.makeText(mContext.getApplicationContext(), "You have cancelled Friend Request",Toast.LENGTH_SHORT).show();
+                            current_states[holder.getAdapterPosition()] = "nothing_happend";
+                            say_hi_view.setText("connect+");
+                            //btn_follow.setBackground(mContext.getDrawable(drawable.mybutton));
+                        }
+                        else{
+                            Toast.makeText(mContext.getApplicationContext(),""+ task.getException().toString(),Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+
+            }
+        });
+
+
 
 
 
@@ -200,13 +254,7 @@ public class chatReqAdapter extends RecyclerView.Adapter<chatReqAdapter.ViewHold
             public void onClick(View view) {
                 row_index = holder.getAdapterPosition();
 
-                //Toast.makeText(mContext.getApplicationContext(),""+current_states,Toast.LENGTH_SHORT).show();
-              //  Toast.makeText(mContext.getApplicationContext(),""+row_index,Toast.LENGTH_SHORT).show();
-                if(holder.say_hi_view.getText().toString().equals("accept")){
-                    current_states = "he_sent_pending";
-                }
-
-                if(current_states.equals("nothing_happend")  ){
+                if(current_states[row_index].equals("nothing_happend")  ){
                     HashMap hashMap = new HashMap();
                     hashMap.put("status","pending");
                     hashMap.put("username",usernames);
@@ -223,7 +271,8 @@ public class chatReqAdapter extends RecyclerView.Adapter<chatReqAdapter.ViewHold
                                         if(i == row_index){
                                             holder.say_hi_view.setText("Requested");
                                             //  say_hi_view.setBackground(mContext.getDrawable(drawable.bluebutton));
-                                            current_states = "I_sent_pending";
+                                            current_states[row_index] = "I_sent_pending";
+                                            sendNotification(user.getId(),user.getUsername(),"you have a friend request");
                                         }
                                     }
 
@@ -235,7 +284,7 @@ public class chatReqAdapter extends RecyclerView.Adapter<chatReqAdapter.ViewHold
                         }
                     });
                 }
-                if(current_states.equals("I_sent_pending")|| current_states.equals("I_sent_decline")){
+                if(current_states[row_index].equals("I_sent_pending")|| current_states.equals("I_sent_decline")){
 
                     reqreference.child(user.getId()).child(firebaseUser.getUid()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -245,15 +294,12 @@ public class chatReqAdapter extends RecyclerView.Adapter<chatReqAdapter.ViewHold
                                 for(int i =0;i<mUsers.size();i++){
                                     if(i == row_index){
                                         holder.say_hi_view.setText("Say Hi...");
-                                        current_states = "nothing_happend";
+                                        current_states[row_index] = "nothing_happend";
 
                                         //  say_hi_view.setBackground(mContext.getDrawable(drawable.bluebutton));
                                     }
                                 }
 
-                                //  btn_follow.setVisibility(View.VISIBLE);
-
-                               // btn_follow.setBackground(mContext.getDrawable(drawable.mybutton));
 
                             }
                             else{
@@ -262,34 +308,8 @@ public class chatReqAdapter extends RecyclerView.Adapter<chatReqAdapter.ViewHold
                         }
                     });
                 }
-                if(current_states.equals("he_sent_pending")){
-                    reqreference.child(firebaseUser.getUid()).child(user.getId()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()){
-                                HashMap hashMap = new HashMap();
-                                hashMap.put("status","friend");
-                                hashMap.put("username",user.getUsername());
-                                hashMap.put("imageUrl",user.getImageURL());
-                                btn_follow.setVisibility(View.VISIBLE);
-                                friendreference.child(firebaseUser.getUid()).child(user.getId()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
-                                    @Override
-                                    public void onComplete(@NonNull Task task) {
-                                        if(task.isSuccessful()){
-                                            friendreference.child(user.getId()).child(firebaseUser.getUid()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
-                                                @Override
-                                                public void onComplete(@NonNull Task task) {
-                                                    Toast.makeText(mContext.getApplicationContext(), "You added as a Connection",Toast.LENGTH_SHORT).show();
-                                                    current_states = "friend";
-                                                    say_hi_view.setText("Connected");
-                                                }
-                                            });
-                                        }
-                                    }
-                                });
-                            }
-                        }
-                    });
+                if(current_states[row_index].equals("he_sent_pending")){
+                    Toast.makeText(mContext.getApplicationContext(),"User already sent request",Toast.LENGTH_SHORT).show();
                 }
                 if(current_states.equals("friend")){
                     //
@@ -301,7 +321,7 @@ public class chatReqAdapter extends RecyclerView.Adapter<chatReqAdapter.ViewHold
     private void checkuserExistance(String id) {
 
         if(current_states.equals("nothing_happend")){
-            current_states ="nothing_happend";
+            current_states[row_index] ="nothing_happend";
 
             say_hi_view.setText("Say Hi...");
             btn_decline.setVisibility(View.GONE);
@@ -323,11 +343,9 @@ public class chatReqAdapter extends RecyclerView.Adapter<chatReqAdapter.ViewHold
 
         public TextView username;
         public ImageView profile_image;
-        private ImageView img_on;
-        private ImageView img_off;
-        private TextView last_msg;
         public ImageView btn_follow;
         public  Button btn_decline;
+        public  TextView txttag;
         public TextView say_hi_view ;
 
         public ViewHolder(View itemView) {
@@ -335,8 +353,7 @@ public class chatReqAdapter extends RecyclerView.Adapter<chatReqAdapter.ViewHold
 
             username = itemView.findViewById(id.username_userfrag);
             profile_image = itemView.findViewById(id.image_user_userfrag);
-            img_on = itemView.findViewById(id.image_online);
-            img_off = itemView.findViewById(id.image_offline);
+            txttag =itemView.findViewById(id.txttagonlayouts);
             btn_follow = itemView.findViewById(id.say_hi_btn);
             btn_decline= itemView.findViewById(id.ignore_chat);
             say_hi_view = itemView.findViewById(id.say_hi_user);
@@ -356,6 +373,55 @@ public class chatReqAdapter extends RecyclerView.Adapter<chatReqAdapter.ViewHold
 
 
     //check for last message
+
+    private void sendNotification(String receiver, final String username, final String message){
+        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
+        Query query = tokens.orderByKey().equalTo(receiver);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Token token = snapshot.getValue(Token.class);
+                    Data data = new Data(firebaseUser.getUid(), R.drawable.app_symbol, username+": "+message, "New Message",
+                            friendid);
+
+                    Sender sender = new Sender(data, token.getToken());
+
+                    apiService.sendNotification(sender)
+                            .enqueue(new Callback<MyResponse>() {
+                                @Override
+                                public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                                    if (response.code() == 200){
+                                        if (response.body().success != 1){
+                                            //Toast.makeText(MessageActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<MyResponse> call, Throwable t) {
+
+                                }
+                            });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+    private void setColor() {
+        txttag.setTextColor(Color.parseColor(tagColor));
+        GradientDrawable myGrad = (GradientDrawable)txttag.getBackground();
+        myGrad.setStroke(convertDpToPx(2), Color.parseColor(tagColor));
+    }
+    private int convertDpToPx(int dp){
+        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+    }
+
+
 
 
 }

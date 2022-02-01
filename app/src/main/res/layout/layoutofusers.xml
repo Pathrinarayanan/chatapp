@@ -24,6 +24,44 @@
         android:text="User Name"
         android:textSize="18sp"
         android:textStyle="bold" />
+    <TextView
+        android:id="@+id/txttagonlayouts"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="1dp"
+        android:layout_toRightOf="@id/username_userfrag"
+        android:background="@drawable/stroke_background"
+        android:text="TextView"
+        android:paddingTop="5dp"
+        android:textAlignment="center"
+        android:textSize="12sp" />
+    <TextView
+        android:id="@+id/lastMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/username_userfrag"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="2dp"
+        android:text="Popularity:"
+        android:fontFamily="@font/montserrat"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+
+    <TextView
+        android:id="@+id/lastMessage2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/username_userfrag"
+        android:layout_marginLeft="155dp"
+        android:layout_marginTop="5dp"
+        android:text="NEW"
+        android:textColor="@color/orange"
+        android:textSize="12sp"
+        android:fontFamily="@font/montserrat"
+
+        android:textStyle="bold" />
 
 
 

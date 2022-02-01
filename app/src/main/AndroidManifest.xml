@@ -13,12 +13,7 @@
         <activity
             android:name=".connectionsMain"
             android:exported="true" />
-        <activity
-            android:name=".Register4"
-            android:exported="true" />
-        <activity
-            android:name=".splashMain"
-            android:exported="true" />
+
         <activity
             android:name=".messageActivity"
             android:exported="true"
@@ -42,29 +37,36 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Login.ForgotPassword"
+            android:name=".Login.AddImage"
             android:exported="false" />
         <activity
             android:name=".settings_nav"
             android:exported="false"
             android:parentActivityName=".MainActivity"></activity>
         <activity
-            android:name=".Login.OTPverification"
+            android:name=".Login.Intro"
             android:exported="false" />
         <activity
             android:name=".Login.Explore"
             android:exported="false" />
         <activity
-            android:name=".Login.UserActivity"
+            android:name=".Login.ForgotPassword"
             android:exported="false" />
         <activity
-            android:name=".Profile"
+            android:name=".Login.VerifyOTP"
+            android:exported="false" />
+        <activity android:name=".ConnectionView"
+android:exported="false">
+
+        </activity>
+        <activity
+            android:name=".Login.Profile"
             android:exported="false" />
         <activity
             android:name=".Blocked"
             android:exported="false" />
         <activity
-            android:name=".editprofile"
+            android:name=".Login.SendOTP"
             android:exported="false" />
         <activity
             android:name=".notificationActivity"
@@ -77,6 +79,12 @@
             android:exported="false" />
         <activity
             android:name=".Login.Register"
+            android:exported="false" />
+        <activity
+            android:name=".Login.Selection"
+            android:exported="false" />
+        <activity
+            android:name=".Login.EditProfile"
             android:exported="false" />
 
 

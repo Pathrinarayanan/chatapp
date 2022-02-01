@@ -131,5 +131,9 @@
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="title_activity_privacy">PrivacyActivity</string>
+    <string name="aboutprofile">About :</string>
+    <string name="thedharshan">thedharshan</string>
+    <string name="connections">Connections</string>
+    <string name="_80">80</string>
 
 </resources>

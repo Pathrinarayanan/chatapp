@@ -8,22 +8,18 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
-import com.example.chatapp.Login.Login;
 import com.example.chatapp.Model.Users;
 import com.example.chatapp.Fragments.ProfileFragments;
 import com.example.chatapp.Fragments.UserFragments;
 import com.example.chatapp.Fragments.chatsFragment;
-import com.example.chatapp.Model.Users;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -103,11 +99,9 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                     Users users = snapshot.getValue(Users.class);
                     username.setText(users.getUsername());
-                    if(users.getImageURL().equals("default")){
-                        imageView.setImageResource(R.drawable.user);
-                    }else{
+
                         Glide.with(getApplicationContext()).load(users.getImageURL()).into(imageView);
-                    }
+
             }
 
             @Override
@@ -129,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() ==R.id.logout){
             FirebaseAuth.getInstance().signOut();
-            Intent i=new Intent(MainActivity.this, com.example.chatapp.splashs.class);
+            Intent i=new Intent(MainActivity.this, com.example.chatapp.Login.Intro.class);
             startActivity(i);
         }
         return super.onOptionsItemSelected(item);

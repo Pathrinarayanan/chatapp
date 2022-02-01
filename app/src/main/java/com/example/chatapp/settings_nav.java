@@ -23,7 +23,7 @@ public class settings_nav extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
-                Intent i=new Intent(settings_nav.this, com.example.chatapp.splashs.class);
+                Intent i=new Intent(settings_nav.this, com.example.chatapp.Login.Intro.class);
                 startActivity(i);
             }
         });

@@ -41,7 +41,7 @@ public class ProfileFragments extends Fragment  {
         mprofile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i=new Intent(getActivity(), com.example.chatapp.Profile.class);
+                Intent i=new Intent(getActivity(), com.example.chatapp.Login.Profile.class);
                 startActivity(i);
             }
         });
@@ -67,7 +67,7 @@ public class ProfileFragments extends Fragment  {
                     public void onClick(DialogInterface dialog, int which) {
                         Toast.makeText(getActivity().getApplicationContext(), "Logged out", Toast.LENGTH_SHORT).show();
                         FirebaseAuth.getInstance().signOut();
-                        Intent i=new Intent(getActivity(), com.example.chatapp.splashs.class);
+                        Intent i=new Intent(getActivity(), com.example.chatapp.Login.Intro.class);
                         startActivity(i);
                     }
                 });

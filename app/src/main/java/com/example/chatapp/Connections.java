@@ -1,12 +1,16 @@
-package com.example.chatapp.Fragments;
+package  com.example.chatapp;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -17,6 +21,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.chatapp.Adapters.OnItemClick;
 import com.example.chatapp.Adapters.SearchAdapter;
 import com.example.chatapp.Adapters.UserAdapter;
+import com.example.chatapp.Adapters.chatAdapter;
+import com.example.chatapp.Adapters.connectedAdapter;
+import com.example.chatapp.Adapters.connectionReqAdapter;
+import com.example.chatapp.Model.Requests;
 import com.example.chatapp.Model.Users;
 import com.example.chatapp.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,13 +33,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class Connection extends Fragment {
+public class Connections extends Fragment {
 
     private RecyclerView recyclerView;
 
@@ -41,15 +50,16 @@ public class Connection extends Fragment {
     private UserAdapter userAdapter;
     private SearchAdapter Searchadapter;
     private List<Users> mUsers;
+    private List<Requests>mRequests;
     static OnItemClick onItemClick;
 
     EditText search_users;
 
-    public static Connection newInstance(OnItemClick click) {
+    public static Connections newInstance(OnItemClick click) {
         onItemClick = click;
         Bundle args = new Bundle();
 
-        Connection fragment = new Connection();
+        Connections fragment = new Connections();
         fragment.setArguments(args);
         return fragment;
     }
@@ -61,54 +71,56 @@ public class Connection extends Fragment {
         View view = inflater.inflate(R.layout.fragment_connection, container, false);
 
 
-        recyclerView = view.findViewById(R.id.recycler_view);
+        recyclerView = view.findViewById(R.id.friendconnectionrecycler_view);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(dividerItemDecoration);
 
-        mUsers = new ArrayList<>();
-
-
-        readUsers();
+        mUsers= new ArrayList<>();
+        searchUsers();
 
         return view;
     }
 
+    private void searchUsers() {
 
+        final FirebaseUser fuser = FirebaseAuth.getInstance().getCurrentUser();
 
-    private void readUsers() {
+        Query query1 = FirebaseDatabase.getInstance().getReference("Connections").child(fuser.getUid()).orderByChild("search");
 
-        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
-
-        reference.addValueEventListener(new ValueEventListener() {
+        query1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                mUsers.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Users req = snapshot.getValue(Users.class);
 
-                    mUsers.clear();
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        Users user = snapshot.getValue(Users.class);
+                    assert req != null;
+                    assert fuser != null;
 
-                        if (user!= null && user.getId()!=null && firebaseUser!=null && !user.getId().equals(firebaseUser.getUid())) {
-                            mUsers.add(user);
-                        }
+                    if (req.getId().equals(fuser.getUid()) ) {
+                        mUsers.add(req);
                     }
 
-                    if(mUsers.size()==0){
-                        frameLayout.setVisibility(View.VISIBLE);
-                    }
-
-                    SearchAdapter searchAdapter = new SearchAdapter(getContext(), onItemClick,mUsers, false);
-                    recyclerView.setAdapter(searchAdapter);
                 }
 
+                //userAdapter = new UserAdapter(getContext(),onItemClick, mUsers, false);
+
+                connectedAdapter adapter = new connectedAdapter(getContext(),onItemClick,mUsers,false);
+                recyclerView.setAdapter(adapter);
+                //  recyclerView.setAdapter(userAdapter);
+            }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
+
     }
+
+
+
 }

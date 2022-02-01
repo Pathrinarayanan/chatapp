@@ -92,6 +92,11 @@ public class chatNotificationAdapter extends RecyclerView.Adapter<chatNotificati
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         Users user = mUsers.get(position);
+        if (user.getImageURL().equals("default")){
+            holder.profile_image.setImageResource(drawable.user);
+        } else {
+            Glide.with(mContext).load(user.getImageURL()).into(holder.profile_image);
+        }
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if(user.getStatus().equals("pending")){
             current_states ="he_sent_pending";
@@ -203,7 +208,7 @@ public class chatNotificationAdapter extends RecyclerView.Adapter<chatNotificati
 //            Glide.with(mContext).load(user.getImageURL()).into(holder.profile_image);
 //        }
 
-        holder.profile_image.setImageResource(drawable.user);
+       // holder.profile_image.setImageResource(drawable.user);
         btn_decline.setVisibility(View.VISIBLE);
         mreference.child("Users").child(firebaseUser.getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
@@ -230,7 +235,7 @@ public class chatNotificationAdapter extends RecyclerView.Adapter<chatNotificati
                             Toast.makeText(mContext.getApplicationContext(), "You have cancelled Friend Request",Toast.LENGTH_SHORT).show();
                             current_states = "nothing_happend";
                             say_hi_view.setText("connect+");
-                            btn_follow.setBackground(mContext.getDrawable(drawable.mybutton));
+                            //btn_follow.setBackground(mContext.getDrawable(drawable.mybutton));
                         }
                         else{
                             Toast.makeText(mContext.getApplicationContext(),""+ task.getException().toString(),Toast.LENGTH_SHORT).show();
@@ -242,13 +247,13 @@ public class chatNotificationAdapter extends RecyclerView.Adapter<chatNotificati
             }
         });
 
-
+        if(holder.say_hi_view.getText().toString().equals("accept")){
+            current_states = "he_sent_pending";
+        }
         holder.btn_follow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(holder.say_hi_view.getText().toString().equals("accept")){
-                    current_states = "he_sent_pending";
-                }
+
                 row_index = holder.getAdapterPosition();
                 friendreference.child(user.getId()).child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
                     @Override

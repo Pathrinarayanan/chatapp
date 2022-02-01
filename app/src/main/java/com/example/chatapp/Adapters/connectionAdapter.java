@@ -5,11 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.example.chatapp.Fragments.Connection;
-import com.example.chatapp.Fragments.selection;
-import com.example.chatapp.Fragments.splash1;
-import com.example.chatapp.Fragments.splash2;
-import com.example.chatapp.Fragments.splash3;
+import com.example.chatapp.Connections;
 
 public class connectionAdapter extends FragmentPagerAdapter{
 
@@ -22,7 +18,7 @@ public class connectionAdapter extends FragmentPagerAdapter{
     @Override
     public Fragment getItem(int position) {
 
-            return new Connection();
+            return new Connections();
 
 
 
