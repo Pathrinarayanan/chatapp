@@ -338,7 +338,20 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                                     if (i == row_index) {
                                         //Toast.makeText(mContext.getApplicationContext(), "You have Send Friend Request", Toast.LENGTH_SHORT).show();
                                         holder.btn_follow.setText("Requested");
-                                        sendNotification(user.getId(), user.getUsername(), "you have a connection request");
+                                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+                                        reference.addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                Users users = snapshot.getValue(Users.class);
+                                                sendNotification(user.getId(),users.getUsername(),"You have a chat request");
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError error) {
+
+                                            }
+                                        });
+                                       // sendNotification(user.getId(), user.getUsername(), "you have a connection request");
                                         holder.btn_follow.setBackground(mContext.getDrawable(drawable.bluebutton));
                                         //  say_hi_view.setBackground(mContext.getDrawable(drawable.bluebutton));
                                         current_state[row_index] = "I_sent_pending";

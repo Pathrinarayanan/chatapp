@@ -161,11 +161,17 @@ public class EditProfile extends AppCompatActivity {
                 String modified_name;
                 String modified_about;
 
-                modified_name = txtEditName.getText().toString();
+                modified_name = txtEditName.getText().toString().trim();
 
-                modified_about = txtEditAbout.getText().toString();
+                modified_about = txtEditAbout.getText().toString().trim();
+                if(modified_name.length() >15){
+                    Toast.makeText(EditProfile.this,"Name is too large",Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    uploadImage(modified_name,modified_about);
+                }
 
-                uploadImage(modified_name,modified_about);
+
             }
         });
 

@@ -125,6 +125,15 @@ public class chatReqAdapter extends RecyclerView.Adapter<chatReqAdapter.ViewHold
 
         Picasso.with(mContext.getApplicationContext()).load(user.getImageURL().toString()).resize(160,160).into(holder.profile_image);
             //Glide.with(mContext).load(user.getImageURL()).into(holder.profile_image);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, com.example.chatapp.friendprofile.class);
+                intent.putExtra("userprofileid", user.getId());
+                mContext.startActivity(intent);
+            }
+        });
+
 
         mreference.child("Users").child(firebaseUser.getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
@@ -340,7 +349,20 @@ public class chatReqAdapter extends RecyclerView.Adapter<chatReqAdapter.ViewHold
                                             holder.say_hi_view.setText("Requested");
                                             //  say_hi_view.setBackground(mContext.getDrawable(drawable.bluebutton));
                                             current_states[row_index] = "I_sent_pending";
-                                            sendNotification(user.getId(),user.getUsername(),"You have a chat request");
+                                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+                                            reference.addValueEventListener(new ValueEventListener() {
+                                                                                @Override
+                                                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                                                    Users users = snapshot.getValue(Users.class);
+                                                                                    sendNotification(user.getId(),users.getUsername(),"You have a chat request");
+                                                                                }
+
+                                                                                @Override
+                                                                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                                                                }
+                                                                            });
+
                                         }
                                     }
 

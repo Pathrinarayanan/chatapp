@@ -31,7 +31,7 @@ public class Selection extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Selection.this,Login.class));
+                startActivity(new Intent(Selection.this,SendOTP.class));
             }
         });
     }

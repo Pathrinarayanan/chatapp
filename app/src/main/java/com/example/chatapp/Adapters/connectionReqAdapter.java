@@ -310,7 +310,22 @@ APIService apiService;
                                 friendreference.child(firebaseUser.getUid()).child(user.getFrid()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
                                     @Override
                                     public void onComplete(@NonNull Task task) {
-                                        if(task.isSuccessful()){     sendNotification(user.getFrid(), user.getUsername(), "accepted the friend request");
+                                        if(task.isSuccessful()){
+                                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+                                            reference.addValueEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                    Users users = snapshot.getValue(Users.class);
+                                                    sendNotification(user.getFrid(),users.getUsername(),"accepted the friend request");
+                                                }
+
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                                }
+                                            });
+
+                                           // sendNotification(user.getFrid(), user.getUsername(), "accepted the friend request");
 
                                             friendreference.child(user.getFrid()).child(firebaseUser.getUid()).updateChildren(hashMap2).addOnCompleteListener(new OnCompleteListener() {
                                                 @Override

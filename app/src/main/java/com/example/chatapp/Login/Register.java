@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +37,7 @@ public class Register extends AppCompatActivity {
     private FirebaseDatabase db;
     private DatabaseReference reference;
     private String userid;
+    private ImageView tagsinf;
     private TextView selected_tag;
 
     @Override
@@ -48,6 +50,7 @@ public class Register extends AppCompatActivity {
         username_field = findViewById(R.id.txtUsername);
         create_account = findViewById(R.id.btnCreateAccount);
         password_field = findViewById(R.id.txtPassword);
+        tagsinf = findViewById(R.id.tagsinfo);
         default_image_url = "https://firebasestorage.googleapis.com/v0/b/chatapp-2d7a9.appspot.com/o/images%2Fuser.png?alt=media&token=0628b0d7-2537-42c4-8eb6-c7015965f1fd";
         selected_tag = findViewById(R.id.selectedtag);
         reference = FirebaseDatabase.getInstance().getReference();
@@ -58,7 +61,12 @@ public class Register extends AppCompatActivity {
         for (int i = 0; i < btn_id.length; i++) {
             tag_btn[i] = (Button) findViewById(btn_id[i]);
         }
-
+    tagsinf.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            startActivity(new Intent(Register.this, com.example.chatapp.Tags.class));
+        }
+    });
         create_account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,12 +83,18 @@ public class Register extends AppCompatActivity {
                 } else if (password.length() < 6) {
 
                     password_field.setError("Length Must Be 6 or more");
-                } else {
+                }
+                else if(username.length() >15){
+                    username_field.setError("Name is too large");
+                }
+
+                else {
                     registerUser(username, password, email);
                 }
             }
         });
     }
+
 
     public void change_tag_value() {
         selected_tag.setText(tag_value);

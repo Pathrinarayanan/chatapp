@@ -21,18 +21,6 @@
         app:layout_constraintVertical_bias="0.977"
         tools:ignore="TextContrastCheck" />
 
-    <ImageView
-        android:id="@+id/back_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/back_button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.041"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.042"
-        app:srcCompat="@drawable/back_button_24" />
 
     <TextView
         android:id="@+id/textView"
@@ -45,11 +33,10 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.427"
-        app:layout_constraintStart_toEndOf="@+id/back_button"
+        app:layout_constraintHorizontal_bias="0.143"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.034" />
-
+        app:layout_constraintVertical_bias="0.046" />
 
     <TextView
         android:id="@+id/textView2"

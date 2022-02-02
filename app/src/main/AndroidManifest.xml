@@ -72,6 +72,9 @@ android:exported="false">
             android:name=".notificationActivity"
             android:exported="false" />
         <activity
+            android:name=".friendprofile"
+            android:exported="false" />
+        <activity
             android:name=".Login.Login"
             android:exported="false" />
         <activity
