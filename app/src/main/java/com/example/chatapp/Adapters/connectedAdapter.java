@@ -6,8 +6,11 @@ import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.Typeface;
 
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +56,9 @@ public class connectedAdapter extends RecyclerView.Adapter<connectedAdapter.View
     DatabaseReference mreference;
     private FirebaseUser firebaseUser;
     String usernames, imageurls;
+    private com.example.chatapp.Login.ColorGetter colorGetter;
+    TextView txttag;
+    private  String tagColor;
     int row_index =-1;
     public String current_state = "friend";
 
@@ -75,6 +81,7 @@ public class connectedAdapter extends RecyclerView.Adapter<connectedAdapter.View
         mreference = FirebaseDatabase.getInstance().getReference();
         btn_follow = view.findViewById(id.follow);
         btn_decline = view.findViewById(id.decline);
+        txttag = view.findViewById(id.txttagonlayouts);
         return new connectedAdapter.ViewHolder(view);
     }
     @Override
@@ -102,6 +109,11 @@ public class connectedAdapter extends RecyclerView.Adapter<connectedAdapter.View
         }
         holder.btn_follow.setText("Connected");
 
+        colorGetter = new com.example.chatapp.Login.ColorGetter();
+        holder.txttag.setText(user.getTag());
+        tagColor = colorGetter.getColor(user.getTag());
+        setColor();
+        holder.txttag.setVisibility(View.GONE);
 
 
 
@@ -170,23 +182,28 @@ public class connectedAdapter extends RecyclerView.Adapter<connectedAdapter.View
 
         public TextView username;
         public ImageView profile_image;
-        private ImageView img_on;
-        private ImageView img_off;
-        private TextView last_msg;
         public Button btn_follow;
         public  Button btn_decline;
+        public TextView txttag;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             username = itemView.findViewById(id.username_userfrag);
             profile_image = itemView.findViewById(id.image_user_userfrag);
-            img_on = itemView.findViewById(id.image_online);
-            img_off = itemView.findViewById(id.image_offline);
             btn_follow = itemView.findViewById(id.follow);
             btn_decline =itemView.findViewById(id.decline);
+            txttag = itemView.findViewById(id.txttagonlayouts);
 
         }
+    }
+    private void setColor() {
+        txttag.setTextColor(Color.parseColor(tagColor));
+        GradientDrawable myGrad = (GradientDrawable)txttag.getBackground();
+        myGrad.setStroke(convertDpToPx(2), Color.parseColor(tagColor));
+    }
+    private int convertDpToPx(int dp){
+        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
     }
 
 

@@ -4,8 +4,11 @@ import static com.example.chatapp.R.*;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.Typeface;
 
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +22,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.chatapp.Adapters.OnItemClick;
+import com.example.chatapp.Fragments.APIService;
 import com.example.chatapp.Model.Chats;
 import com.example.chatapp.Model.Requests;
 import com.example.chatapp.Model.Users;
+import com.example.chatapp.Notifications.Client;
+import com.example.chatapp.Notifications.Data;
+import com.example.chatapp.Notifications.MyResponse;
+import com.example.chatapp.Notifications.Sender;
+import com.example.chatapp.Notifications.Token;
 import com.example.chatapp.R;
 import com.example.chatapp.R.drawable;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -32,10 +41,15 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class chatNotificationAdapter extends RecyclerView.Adapter<chatNotificationAdapter.ViewHolder> {
 
@@ -51,6 +65,12 @@ public class chatNotificationAdapter extends RecyclerView.Adapter<chatNotificati
     DatabaseReference mreference;
     private FirebaseUser firebaseUser;
     String usernames, imageurls;
+    private  String tagColor;
+    TextView txttag;
+    APIService apiService;
+    String friendid;
+    private com.example.chatapp.Login.ColorGetter colorGetter;
+
     int row_index =-1;
     String current_states ="he_sent_pending" ;
 
@@ -76,6 +96,8 @@ public class chatNotificationAdapter extends RecyclerView.Adapter<chatNotificati
         btn_follow = (ImageView)view.findViewById(id.say_hi_btn);
         btn_decline = (Button) view.findViewById(id.ignore_chat);
         say_hi_view = (TextView) view.findViewById(id.say_hi_user);
+        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
+        txttag = view.findViewById(id.txttagonlayouts);
         return new chatNotificationAdapter.ViewHolder(view);
     }
     @Override
@@ -97,6 +119,11 @@ public class chatNotificationAdapter extends RecyclerView.Adapter<chatNotificati
         } else {
             Glide.with(mContext).load(user.getImageURL()).into(holder.profile_image);
         }
+        colorGetter = new com.example. chatapp.Login.ColorGetter();
+        holder.txttag.setText(user.getTag());
+        tagColor = colorGetter.getColor(user.getTag());
+        setColor();
+        friendid = user.getFrid();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if(user.getStatus().equals("pending")){
             current_states ="he_sent_pending";
@@ -345,7 +372,7 @@ public class chatNotificationAdapter extends RecyclerView.Adapter<chatNotificati
                                                 public void onComplete(@NonNull Task task) {
                                                     Toast.makeText(mContext.getApplicationContext(), "You added as a Connection",Toast.LENGTH_SHORT).show();
                                                     current_states = "friend";
-
+                                                    sendNotification(user.getFrid(), user.getUsername(), "accepted the friend request");
                                                     holder.say_hi_view.setText("Connected");
                                                 }
                                             });
@@ -404,23 +431,20 @@ public class chatNotificationAdapter extends RecyclerView.Adapter<chatNotificati
 
         public TextView username;
         public ImageView profile_image;
-        private ImageView img_on;
-        private ImageView img_off;
-        private TextView last_msg;
         public ImageView btn_follow;
         public  Button btn_decline;
         public  TextView say_hi_view;
+        public TextView txttag;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             username = itemView.findViewById(id.username_userfrag);
             profile_image = itemView.findViewById(id.image_user_userfrag);
-            img_on = itemView.findViewById(id.image_online);
-            img_off = itemView.findViewById(id.image_offline);
             btn_follow = itemView.findViewById(id.say_hi_btn);
             btn_decline = itemView.findViewById(id.ignore_chat);
             say_hi_view  = itemView.findViewById(id.say_hi_user);
+            txttag = itemView.findViewById(id.txttagonlayouts);
 
 
         }
@@ -472,7 +496,52 @@ public class chatNotificationAdapter extends RecyclerView.Adapter<chatNotificati
 
     }
 
+    private void setColor() {
+        txttag.setTextColor(Color.parseColor(tagColor));
+        GradientDrawable myGrad = (GradientDrawable)txttag.getBackground();
+        myGrad.setStroke(convertDpToPx(2), Color.parseColor(tagColor));
+    }
+    private int convertDpToPx(int dp){
+        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+    }
+    private void sendNotification(String receiver, final String username, final String message){
+        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
+        Query query = tokens.orderByKey().equalTo(receiver);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Token token = snapshot.getValue(Token.class);
+                    Data data = new Data(firebaseUser.getUid(), R.drawable.app_symbol, username+" is available to chat" , "Let's Chat",
+                            friendid);
 
+                    Sender sender = new Sender(data, token.getToken());
+
+                    apiService.sendNotification(sender)
+                            .enqueue(new Callback<MyResponse>() {
+                                @Override
+                                public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                                    if (response.code() == 200){
+                                        if (response.body().success != 1){
+                                            //Toast.makeText(MessageActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<MyResponse> call, Throwable t) {
+
+                                }
+                            });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 
 
     //check for last message

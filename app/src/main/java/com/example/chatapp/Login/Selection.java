@@ -16,10 +16,10 @@ public class Selection extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_selection);
+        setContentView(R.layout.fragment_selection);
 
-        btnRegister = findViewById(R.id.registerbtn);
-        btnLogin = findViewById(R.id.loginbtn);
+        btnRegister = findViewById(R.id.registerb);
+        btnLogin = findViewById(R.id.signupb);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -31,7 +31,7 @@ public class Selection extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Selection.this,SendOTP.class));
+                startActivity(new Intent(Selection.this,Login.class));
             }
         });
     }

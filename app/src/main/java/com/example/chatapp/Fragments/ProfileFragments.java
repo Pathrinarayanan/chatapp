@@ -85,7 +85,7 @@ public class ProfileFragments extends Fragment  {
         mblocked.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent in = new Intent(getActivity(),com.example.chatapp.Blocked.class);
+                Intent in = new Intent(getActivity(),com.example.chatapp.BlockView.class);
                 startActivity(in);
             }
         });

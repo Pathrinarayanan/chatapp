@@ -15,15 +15,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.chatapp.ConnectionView;
+import com.example.chatapp.Model.Users;
 import com.example.chatapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Profile extends AppCompatActivity {
 
@@ -34,6 +41,7 @@ public class Profile extends AppCompatActivity {
     private com.example.chatapp.Login.ColorGetter colorGetter;
     private String tagColor;
     ConstraintLayout connections;
+    private List<Users> mUsers;
 
 
     private FirebaseUser loggedUser;
@@ -59,9 +67,11 @@ public class Profile extends AppCompatActivity {
         colorGetter = new com.example. chatapp.Login.ColorGetter();
         mdb = FirebaseDatabase.getInstance();
         mreference = mdb.getReference();
+        mUsers= new ArrayList<>();
 
         loggedUser = auth.getCurrentUser();
         userid = loggedUser.getUid();
+
 
         mreference.child("Users").child(userid).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
@@ -88,6 +98,34 @@ public class Profile extends AppCompatActivity {
                 }
             }
         });
+        Query query1 = FirebaseDatabase.getInstance().getReference("Connections").child(userid).orderByChild("search");
+
+        query1.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                mUsers.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Users req = snapshot.getValue(Users.class);
+
+                    assert req != null;
+                    assert userid != null;
+
+                    if (req.getId().equals(userid)) {
+                        mUsers.add(req);
+                    }
+
+                }
+                int size = mUsers.size();
+                Integer s = new Integer(size);
+                txtConnections.setText(s.toString());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
 
         btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override

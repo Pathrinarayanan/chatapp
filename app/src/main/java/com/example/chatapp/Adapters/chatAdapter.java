@@ -29,6 +29,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.List;
@@ -79,11 +80,7 @@ public class chatAdapter extends RecyclerView.Adapter<chatAdapter.ViewHolder> {
         //    holder.btn_follow.setVisibility(View.GONE);
         }
 
-        if (user.getImageURL().equals("default")){
-            holder.profile_image.setImageResource(R.drawable.user);
-        } else {
-            Glide.with(mContext).load(user.getImageURL()).into(holder.profile_image);
-        }
+        Picasso.with(mContext.getApplicationContext()).load(user.getImageURL().toString()).resize(160,160).into(holder.profile_image);
 
         if (ischat){
             lastMessage(user.getId(), holder.last_msg);

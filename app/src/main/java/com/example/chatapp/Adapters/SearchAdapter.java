@@ -57,7 +57,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     private Context mContext;
     private List<Users> mUsers;
     private List<Requests>mrequests;
-    DatabaseReference reqreference,friendreference;
+    DatabaseReference reqreference,friendreference,blockref;
     Button btn_follow,btn_decline;
     private boolean ischat;
     private OnItemClick onItemClick;
@@ -89,6 +89,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         View view = LayoutInflater.from(mContext).inflate(layout.layoutofusers, parent, false);
         reqreference = FirebaseDatabase.getInstance().getReference().child("Requests");
         friendreference = FirebaseDatabase.getInstance().getReference().child("Connections");
+        blockref =  FirebaseDatabase.getInstance().getReference().child("Blocked");
         mreference = FirebaseDatabase.getInstance().getReference();
         btn_follow = view.findViewById(id.follow);
         apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
@@ -143,6 +144,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 }
             }
         });
+
         friendreference.child(firebaseUser.getUid()).child(user.getId()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -166,6 +168,53 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
             }
         });
+        blockref.child(firebaseUser.getUid()).child(user.getId()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    //  current_state[holder.getAdapterPosition()] = "friend";
+
+                    holder.btn_follow.setText("Blocked");
+                    holder.btn_follow.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                        }
+                    });
+                    holder.btn_follow.setBackground(mContext.getDrawable(drawable.mybutton));
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        blockref.child(user.getId()).child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    //  current_state[holder.getAdapterPosition()] = "friend";
+
+                    holder.btn_follow.setText("Blocked");
+                    holder.btn_follow.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                        }
+                    });
+                    holder.btn_follow.setBackground(mContext.getDrawable(drawable.mybutton));
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
         friendreference.child(user.getId()).child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -237,6 +286,11 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
             }
         });
+        for(int i=0;i<mUsers.size();i++){
+            if(holder.btn_follow.getText().toString().equals("Requested")){
+                current_state[i]="I_sent_pending";
+            }
+        }
 
         holder.btn_decline.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -272,6 +326,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                     hashMap.put("username", usernames);
                     hashMap.put("imageURL", imageurls);
                     hashMap.put("id", user.getId());
+                    hashMap.put("tag",user.getTag());
                     hashMap.put("frid", firebaseUser.getUid());
                     hashMap.put("search", user.getUsername().toLowerCase());
                     reqreference.child(user.getId()).child(firebaseUser.getUid()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
@@ -281,9 +336,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
                                 for (int i = 0; i < mUsers.size(); i++) {
                                     if (i == row_index) {
-                                        Toast.makeText(mContext.getApplicationContext(), "You have Send Friend Request", Toast.LENGTH_SHORT).show();
+                                        //Toast.makeText(mContext.getApplicationContext(), "You have Send Friend Request", Toast.LENGTH_SHORT).show();
                                         holder.btn_follow.setText("Requested");
-                                        sendNotification(firebaseUser.getUid(), user.getUsername(), "you have a friend request");
+                                        sendNotification(user.getId(), user.getUsername(), "you have a connection request");
                                         holder.btn_follow.setBackground(mContext.getDrawable(drawable.bluebutton));
                                         //  say_hi_view.setBackground(mContext.getDrawable(drawable.bluebutton));
                                         current_state[row_index] = "I_sent_pending";
@@ -305,7 +360,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                             if (task.isSuccessful()) {
                                 for (int i = 0; i < mUsers.size(); i++) {
                                     if (i == row_index) {
-                                        Toast.makeText(mContext.getApplicationContext(), "You have cancelled Friend Request", Toast.LENGTH_SHORT).show();
+                                       // Toast.makeText(mContext.getApplicationContext(), "You have cancelled Friend Request", Toast.LENGTH_SHORT).show();
                                         current_state[row_index] = "nothing_happend";
                                         //  btn_follow.setVisibility(View.VISIBLE);
                                         holder.btn_follow.setText("connect+");
@@ -365,7 +420,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Token token = snapshot.getValue(Token.class);
-                    Data data = new Data(firebaseUser.getUid(), R.drawable.app_symbol, username+": "+message, "New Message",
+                    Data data = new Data(firebaseUser.getUid(), R.drawable.app_symbol, message +" from "+username, "Connection Request",
                             friendid);
 
                     Sender sender = new Sender(data, token.getToken());

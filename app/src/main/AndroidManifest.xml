@@ -63,7 +63,7 @@ android:exported="false">
             android:name=".Login.Profile"
             android:exported="false" />
         <activity
-            android:name=".Blocked"
+            android:name=".BlockView"
             android:exported="false" />
         <activity
             android:name=".Login.SendOTP"

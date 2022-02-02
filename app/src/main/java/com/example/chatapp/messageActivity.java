@@ -1,6 +1,8 @@
 package com.example.chatapp;
 
 
+import static com.firebase.ui.auth.AuthUI.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -41,6 +44,7 @@ import com.example.chatapp.Adapters.highAdapter;
 import com.example.chatapp.Adapters.romanticAdapter;
 import com.example.chatapp.Adapters.sadAdapter;
 import com.example.chatapp.Fragments.APIService;
+import com.example.chatapp.Login.Profile;
 import com.example.chatapp.Model.Chats;
 import com.example.chatapp.Model.Users;
 import com.example.chatapp.Notifications.Client;
@@ -48,6 +52,8 @@ import com.example.chatapp.Notifications.Data;
 import com.example.chatapp.Notifications.MyResponse;
 import com.example.chatapp.Notifications.Sender;
 import com.example.chatapp.Notifications.Token;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -56,6 +62,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 
 import java.util.ArrayList;
@@ -90,6 +97,7 @@ public class messageActivity extends AppCompatActivity {
     APIService apiService;
     RelativeLayout leftchats;
     Boolean notify = false;
+    public String names ,tag,imageurls;
 
 
     @Override
@@ -117,6 +125,8 @@ public class messageActivity extends AppCompatActivity {
 
 
 
+
+
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         myid = firebaseUser.getUid(); // my id or the one who is loggedin
 
@@ -131,6 +141,7 @@ public class messageActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 Users users = snapshot.getValue(Users.class);
+
 
                 usernameonToolbar.setText(users.getUsername()); // set the text of the user on textivew in toolbar
 
@@ -804,17 +815,17 @@ public class messageActivity extends AppCompatActivity {
 
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
                 alertDialogBuilder.setMessage("Are you sure you want to delete this chat? \nAll the chat will be cleared for both");
-                        alertDialogBuilder.setPositiveButton("yes",
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface arg0, int arg1) {
-                                        Toast.makeText(messageActivity.this,"Message deleted",Toast.LENGTH_LONG).show();
-                                        deleteMsg();
-                                        deleteFriendMsg();
-                                    }
-                                });
+                alertDialogBuilder.setPositiveButton("yes",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                Toast.makeText(messageActivity.this, "Message deleted", Toast.LENGTH_LONG).show();
+                                deleteMsg();
+                                deleteFriendMsg();
+                            }
+                        });
 
-                alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
+                alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
@@ -825,35 +836,111 @@ public class messageActivity extends AppCompatActivity {
                 alertDialog.show();
                 break;
             }
+
             case R.id.block: {
 
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-                alertDialogBuilder.setMessage("Are you sure you want to block this chat?");
-                alertDialogBuilder.setPositiveButton("yes",
+                AlertDialog.Builder alertDialogBuild = new AlertDialog.Builder(this);
+                alertDialogBuild.setMessage("Are you sure you want to block this chat?");
+                alertDialogBuild.setPositiveButton("yes",
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface arg0, int arg1) {
-                                Toast.makeText(messageActivity.this,"Blocked",Toast.LENGTH_LONG).show();
-                            }
-                        });
 
-                alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
+
+                                DatabaseReference reqreference = FirebaseDatabase.getInstance().getReference().child("Blocked");
+                                DatabaseReference reqreference1 = FirebaseDatabase.getInstance().getReference().child("Chatslist");
+                                DatabaseReference reqreference2 = FirebaseDatabase.getInstance().getReference().child("Connections");
+                                DatabaseReference mreference = FirebaseDatabase.getInstance().getReference();
+                                mreference.child("Users").child(friendid).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                        if (!task.isSuccessful()) {
+                                            Toast.makeText(messageActivity.this,"Error"+task.getException(),Toast.LENGTH_LONG).show();
+                                        }
+                                        else {
+                                           // String about = task.getResult().child("about").getValue().toString();
+                                            String name = task.getResult().child("username").getValue().toString();
+                                             String tags= task.getResult().child("tag").getValue().toString();
+                                          //  String connections = task.getResult().child("connections").getValue().toString();
+                                            String imageurl = task.getResult().child("imageURL").getValue().toString();
+                                            HashMap hashMaps = new HashMap();
+                                            hashMaps.put("status", "pending");
+                                            hashMaps.put("username", name);
+                                            hashMaps.put("imageURL", imageurl);
+                                            hashMaps.put("id", friendid);
+                                            hashMaps.put("tag", tags);
+                                            hashMaps.put("frid", myid);
+                                            hashMaps.put("search",  name.toLowerCase());
+                                            reqreference.child(myid).child(friendid).updateChildren(hashMaps).addOnCompleteListener(new OnCompleteListener() {
+                                                @Override
+                                                public void onComplete(@NonNull Task task) {
+                                                    if (task.isSuccessful()) {
+                                                        reqreference2.child(myid).child(friendid).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                if(task.isSuccessful()){
+                                                                    reqreference2.child(friendid).child(myid).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                        @Override
+                                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                                            if(task.isSuccessful()){
+                                                                                reqreference1.child(myid).child(friendid).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                                    @Override
+                                                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                                                        if(task.isSuccessful()){
+                                                                                            reqreference1.child(friendid).child(myid).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                                                @Override
+                                                                                                public void onComplete(@NonNull Task<Void> task) {
+                                                                                                    if(task.isSuccessful()){
+                                                                                                        Toast.makeText(messageActivity.this, "Blocked ", Toast.LENGTH_LONG).show();
+                                                                                                        startActivity(new Intent(messageActivity.this,com.example.chatapp.MainActivity.class));
+                                                                                                    }
+                                                                                                }
+                                                                                            });
+                                                                                        }
+                                                                                    }
+                                                                                });
+
+                                                                            }
+                                                                        }
+                                                                    });
+                                                                }
+                                                            }
+                                                        });
+
+                                                        //Toast.makeText(messageActivity.this, "Blocked", Toast.LENGTH_LONG).show();
+
+                                                    }
+                                                }
+                                            });
+                                        }
+
+
+
+
+                                        } });
+                                    }
+                                });
+
+
+
+
+
+                alertDialogBuild.setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
                     }
                 });
 
-                AlertDialog alertDialog = alertDialogBuilder.create();
+                AlertDialog alertDialog = alertDialogBuild.create();
                 alertDialog.show();
+
+            } return true;
+        }
+
+return true;
             }
-
-                return true;
-
-
-            }
-        return true;
-    }
+        //return true;
     @Override
     protected void onResume() {
         super.onResume();

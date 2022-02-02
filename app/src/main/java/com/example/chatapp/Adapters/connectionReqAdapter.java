@@ -5,8 +5,11 @@ import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.Typeface;
 
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +23,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.chatapp.Adapters.OnItemClick;
+import com.example.chatapp.Fragments.APIService;
 import com.example.chatapp.Model.Chats;
 import com.example.chatapp.Model.Requests;
 import com.example.chatapp.Model.Users;
+import com.example.chatapp.Notifications.Client;
+import com.example.chatapp.Notifications.Data;
+import com.example.chatapp.Notifications.MyResponse;
+import com.example.chatapp.Notifications.Sender;
+import com.example.chatapp.Notifications.Token;
 import com.example.chatapp.R;
 import com.example.chatapp.R.drawable;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -33,18 +42,23 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class connectionReqAdapter extends RecyclerView.Adapter<connectionReqAdapter.ViewHolder> {
 
     private Context mContext;
     private List<Users> mUsers;
     private List<Requests>mrequests;
-    DatabaseReference reqreference,friendreference;
+    DatabaseReference reqreference,friendreference,blockref;
     Button btn_follow,btn_decline;
     private boolean ischat;
     private OnItemClick onItemClick;
@@ -53,7 +67,11 @@ public class connectionReqAdapter extends RecyclerView.Adapter<connectionReqAdap
     String usernames, imageurls;
     int row_index =-1;
     public String current_state = "he_sent_pending";
-
+APIService apiService;
+    private  String tagColor;
+    String friendid;
+    TextView txttag;
+    private com.example.chatapp.Login.ColorGetter colorGetter;
 
     public connectionReqAdapter(Context mContext, OnItemClick onItemClick, List<Users> mUsers, boolean ischat){
         this.onItemClick = onItemClick;
@@ -73,7 +91,11 @@ public class connectionReqAdapter extends RecyclerView.Adapter<connectionReqAdap
         friendreference = FirebaseDatabase.getInstance().getReference().child("Connections");
         mreference = FirebaseDatabase.getInstance().getReference();
         btn_follow = view.findViewById(id.follow);
+        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
         btn_decline = view.findViewById(id.decline);
+        txttag = view.findViewById(id.txttagonlayouts);
+
+        blockref =  FirebaseDatabase.getInstance().getReference().child("Blocked");
         return new connectionReqAdapter.ViewHolder(view);
     }
     @Override
@@ -93,12 +115,17 @@ public class connectionReqAdapter extends RecyclerView.Adapter<connectionReqAdap
 
 
         holder.username.setText(user.getUsername());
+        friendid = user.getFrid();
 
         if (user.getImageURL().equals("default")){
             holder.profile_image.setImageResource(drawable.user);
         } else {
             Glide.with(mContext).load(user.getImageURL()).into(holder.profile_image);
         }
+        colorGetter = new com.example. chatapp.Login.ColorGetter();
+        holder.txttag.setText(user.getTag());
+        tagColor = colorGetter.getColor(user.getTag());
+        setColor();
         mreference.child("Users").child(firebaseUser.getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -114,6 +141,53 @@ public class connectionReqAdapter extends RecyclerView.Adapter<connectionReqAdap
                 }
             }
         });
+        blockref.child(firebaseUser.getUid()).child(user.getId()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    //  current_state[holder.getAdapterPosition()] = "friend";
+
+                    holder.btn_follow.setText("Blocked");
+                    holder.btn_follow.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                        }
+                    });
+                    holder.btn_follow.setBackground(mContext.getDrawable(drawable.mybutton));
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        blockref.child(user.getId()).child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    //  current_state[holder.getAdapterPosition()] = "friend";
+
+                    holder.btn_follow.setText("Blocked");
+                    holder.btn_follow.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                        }
+                    });
+                    holder.btn_follow.setBackground(mContext.getDrawable(drawable.mybutton));
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
         current_state = "he_sent_pending";
 
         btn_follow.setText("accept");
@@ -139,6 +213,10 @@ public class connectionReqAdapter extends RecyclerView.Adapter<connectionReqAdap
 
             }
         });
+        if(mUsers.size() >1 && current_state.equals("he_sent_pending") ){
+            sendNotification(firebaseUser.getUid(),user.getUsername(),"you have a friend request");
+        }
+
 
 
         holder.btn_follow.setOnClickListener(new View.OnClickListener() {
@@ -209,17 +287,21 @@ public class connectionReqAdapter extends RecyclerView.Adapter<connectionReqAdap
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()){
                                 HashMap hashMap = new HashMap();
+                                hashMap.put("tag",user.getTag());
                                 hashMap.put("id",firebaseUser.getUid());
                                 hashMap.put("search",user.getUsername().toLowerCase());
                                 hashMap.put("status","friend");
+
                                 hashMap.put("username",user.getUsername());
                                 hashMap.put("imageURL",user.getImageURL());
                                 hashMap.put("frid",user.getFrid());
 
                                 HashMap hashMap2= new HashMap();
+                                hashMap2.put("tag",user.getTag());
                                 hashMap2.put("id",user.getFrid());
                                 hashMap2.put("search",user.getUsername().toLowerCase());
                                 hashMap2.put("status","friend");
+
                                 hashMap2.put("username",user.getUsername());
                                 hashMap2.put("imageURL",user.getImageURL());
                                 hashMap2.put("frid",firebaseUser.getUid());
@@ -228,7 +310,7 @@ public class connectionReqAdapter extends RecyclerView.Adapter<connectionReqAdap
                                 friendreference.child(firebaseUser.getUid()).child(user.getFrid()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
                                     @Override
                                     public void onComplete(@NonNull Task task) {
-                                        if(task.isSuccessful()){
+                                        if(task.isSuccessful()){     sendNotification(user.getFrid(), user.getUsername(), "accepted the friend request");
 
                                             friendreference.child(user.getFrid()).child(firebaseUser.getUid()).updateChildren(hashMap2).addOnCompleteListener(new OnCompleteListener() {
                                                 @Override
@@ -260,6 +342,18 @@ public class connectionReqAdapter extends RecyclerView.Adapter<connectionReqAdap
 
                                                             if (!snapshot.exists()) {
                                                                 reference2.child("id").setValue(user.getFrid());
+
+                                                            }
+                                                            if(task.isSuccessful()){
+                                                                for(int i =0;i<mUsers.size();i++){
+                                                                    if(i == row_index){
+                                                                        Toast.makeText(mContext.getApplicationContext(), "You added as a Connection",Toast.LENGTH_SHORT).show();
+                                                                        current_state = "friend";
+                                                                        holder.btn_follow.setText("Connected");
+                                                                        holder.btn_decline.setVisibility(View.GONE);
+
+                                                                    }
+                                                                }
                                                             }
 
                                                         }
@@ -270,14 +364,7 @@ public class connectionReqAdapter extends RecyclerView.Adapter<connectionReqAdap
                                                         }
                                                     });
 
-                                                    for(int i =0;i<mUsers.size();i++){
-                                                        if(i == row_index){
-                                                            Toast.makeText(mContext.getApplicationContext(), "You added as a Connection",Toast.LENGTH_SHORT).show();
-                                                            current_state = "friend";
-                                                            holder.btn_follow.setText("Connected");
-                                                            holder.btn_decline.setVisibility(View.GONE);
-                                                        }
-                                                    }
+
 
                                                 }
                                             });
@@ -315,9 +402,7 @@ public class connectionReqAdapter extends RecyclerView.Adapter<connectionReqAdap
 
         public TextView username;
         public ImageView profile_image;
-        private ImageView img_on;
-        private ImageView img_off;
-        private TextView last_msg;
+      public  TextView txttag;
         public Button btn_follow;
         public  Button btn_decline;
 
@@ -326,12 +411,58 @@ public class connectionReqAdapter extends RecyclerView.Adapter<connectionReqAdap
 
             username = itemView.findViewById(id.username_userfrag);
             profile_image = itemView.findViewById(id.image_user_userfrag);
-            img_on = itemView.findViewById(id.image_online);
-            img_off = itemView.findViewById(id.image_offline);
             btn_follow = itemView.findViewById(id.follow);
             btn_decline =itemView.findViewById(id.decline);
+            txttag = itemView.findViewById(id.txttagonlayouts);
 
         }
+    }
+    private void sendNotification(String receiver, final String username, final String message){
+        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
+        Query query = tokens.orderByKey().equalTo(receiver);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Token token = snapshot.getValue(Token.class);
+                    Data data = new Data(firebaseUser.getUid(), R.drawable.app_symbol, username+" is added you as a connection" , "Connection",
+                            friendid);
+
+                    Sender sender = new Sender(data, token.getToken());
+
+                    apiService.sendNotification(sender)
+                            .enqueue(new Callback<MyResponse>() {
+                                @Override
+                                public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                                    if (response.code() == 200){
+                                        if (response.body().success != 1){
+                                            //Toast.makeText(MessageActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<MyResponse> call, Throwable t) {
+
+                                }
+                            });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void setColor() {
+        txttag.setTextColor(Color.parseColor(tagColor));
+        GradientDrawable myGrad = (GradientDrawable)txttag.getBackground();
+        myGrad.setStroke(convertDpToPx(2), Color.parseColor(tagColor));
+    }
+    private int convertDpToPx(int dp){
+        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
     }
 
 
