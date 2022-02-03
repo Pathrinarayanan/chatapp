@@ -50,10 +50,10 @@
             android:layout_width="346dp"
             android:layout_height="36dp"
             android:background="@drawable/textborder"
-            android:paddingLeft="8dp"
             android:drawableLeft="@drawable/search_bg"
             android:drawablePadding="5dp"
             android:hint="Search..."
+            android:paddingLeft="8dp"
             android:shadowColor="@color/white"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
@@ -129,11 +129,34 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="564dp"
-        android:layout_below="@+id/constraintLayout3"
-        android:layout_marginTop="3dp" />
+        android:id="@+id/recycler_view"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="160dp"
+        android:visibility="gone"
+        android:layout_marginRight="0dp"
+        android:layout_marginBottom="0dp">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewpagermood"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="160dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginBottom="0dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    </androidx.viewpager.widget.ViewPager>
+
+
+
+
 
     <!-- empty state -->
     <include

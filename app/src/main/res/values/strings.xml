@@ -104,7 +104,7 @@
     <string name="profile">Profile</string>
     <string name="save">Save</string>
     <string name="ok_text">ok</string>
-
+    <string name="visitprofile">Visit profile</string>
     <string-array name="Settings">
         <item>Profile</item>
         <item>Blocked</item>

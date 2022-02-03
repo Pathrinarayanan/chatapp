@@ -5,6 +5,27 @@ public class Users {
    String imageURL;
     String id;
     String search;
+
+    public Users(String username, String imageURL, String id, String search, String mood, String frid, String tag, String status) {
+        this.username = username;
+        this.imageURL = imageURL;
+        this.id = id;
+        this.search = search;
+        this.mood = mood;
+        this.frid = frid;
+        this.tag = tag;
+        this.status = status;
+    }
+
+    public String getMood() {
+        return mood;
+    }
+
+    public void setMood(String mood) {
+        this.mood = mood;
+    }
+
+    String mood;
     String frid;
 
     public String getTag() {
@@ -20,14 +41,6 @@ public class Users {
 
     String status;
 
-    public Users(String username, String imageURL, String id, String status ,String search,String frid) {
-        this.username = username;
-        this.imageURL = imageURL;
-        this.id = id;
-        this.status = status;
-        this.search = search;
-        this.frid = frid;
-    }
     public Users(){
 
     }

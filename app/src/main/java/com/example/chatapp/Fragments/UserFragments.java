@@ -1,22 +1,29 @@
 package  com.example.chatapp.Fragments;
 
+import android.annotation.SuppressLint;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.chatapp.Adapters.OnItemClick;
 import com.example.chatapp.Adapters.SearchAdapter;
@@ -25,8 +32,24 @@ import com.example.chatapp.Adapters.chatAdapter;
 import com.example.chatapp.ChatRequest;
 import com.example.chatapp.Model.Users;
 import com.example.chatapp.R;
+import com.example.chatapp.ViewpageAdapter;
 import com.example.chatapp.chatReqAdapter;
+import com.example.chatapp.currentmood.angry;
+import com.example.chatapp.currentmood.attached;
+import com.example.chatapp.currentmood.broken;
+import com.example.chatapp.currentmood.confused;
+import com.example.chatapp.currentmood.excited;
+import com.example.chatapp.currentmood.happy;
+import com.example.chatapp.currentmood.high;
+import com.example.chatapp.currentmood.normal;
+import com.example.chatapp.currentmood.romantic;
+import com.example.chatapp.currentmood.sad;
+import com.example.chatapp.messageActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -50,6 +73,8 @@ public class UserFragments extends Fragment {
     private SearchAdapter Searchadapter;
     private List<Users> mUsers;
     static OnItemClick onItemClick;
+    ImageView moodexplorer;
+    public String moods;
 
     EditText search_users;
 
@@ -68,6 +93,50 @@ public class UserFragments extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_users, container, false);
+        TabLayout tabLayout = view.findViewById(R.id.moodselection);
+        ViewPager viewpager = view.findViewById(R.id.viewpagermood);
+        moodexplorer = view.findViewById(R.id.moods_explorer);
+        DatabaseReference mreference = FirebaseDatabase.getInstance().getReference();
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        moodexplorer.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                PopupMenu popup = new PopupMenu(getActivity(), moodexplorer);
+                                                popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+                                                //registering popup with OnMenuItemClickListener
+                                                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                                                    public boolean onMenuItemClick(MenuItem item) {
+                                                        Toast.makeText(getActivity(), "" + item.getTitle() + " mood is setted!!", Toast.LENGTH_SHORT).show();
+                                                        mreference.child("Users").child(firebaseUser.getUid()).child("mood").setValue(item.getTitle().toString().toLowerCase());
+
+
+
+                                                        return true;}
+                                                });popup.show();
+                                            }
+                                        });
+
+
+
+
+
+
+        ViewpageAdapter viewpageAdapter = new ViewpageAdapter(getActivity().getSupportFragmentManager());
+        viewpageAdapter.addFragements(new normal(),"normal");
+        viewpageAdapter.addFragements(new happy(),"happy");
+        viewpageAdapter.addFragements(new romantic(),"romantic");
+        viewpageAdapter.addFragements(new broken(),"broken");
+        viewpageAdapter.addFragements(new excited(),"excited");
+        viewpageAdapter.addFragements(new high(),"high");
+        viewpageAdapter.addFragements(new sad(),"sad");
+        viewpageAdapter.addFragements(new attached(),"attached");
+        viewpageAdapter.addFragements(new confused(),"confused");
+        viewpageAdapter.addFragements(new angry(),"angry");
+        viewpager.setAdapter(viewpageAdapter);
+        tabLayout.setupWithViewPager(viewpager);
+      //  tabLayout.getTabAt(0).get
+
 
 
         recyclerView = view.findViewById(R.id.recycler_view);
@@ -82,22 +151,29 @@ public class UserFragments extends Fragment {
         mUsers = new ArrayList<>();
 
 
-        readUsers();
+
         search_users = view.findViewById(R.id.search_users);
         search_users.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                viewpager.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
                 searchUsers(charSequence.toString().toLowerCase());
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                searchUsers(charSequence.toString().toLowerCase());
+                recyclerView.setVisibility(View.VISIBLE);
+                viewpager.setVisibility(View.GONE);
+
+               searchUsers(charSequence.toString().toLowerCase());
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-                readUsers();
+                viewpager.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.GONE);
+               readUsers();
             }
         });
 

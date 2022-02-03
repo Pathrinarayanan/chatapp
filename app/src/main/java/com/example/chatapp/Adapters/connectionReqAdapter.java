@@ -117,6 +117,7 @@ APIService apiService;
         holder.username.setText(user.getUsername());
         friendid = user.getFrid();
 
+
         if (user.getImageURL().equals("default")){
             holder.profile_image.setImageResource(drawable.user);
         } else {
@@ -141,6 +142,15 @@ APIService apiService;
                 }
             }
         });
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mContext.startActivity(new Intent(mContext,com.example.chatapp.friendprofile.class));
+
+            }
+        });
+
+
         blockref.child(firebaseUser.getUid()).child(user.getId()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

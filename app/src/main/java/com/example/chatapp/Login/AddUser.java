@@ -5,8 +5,17 @@ public class AddUser {
     String email;
     String username;
     String tag;
+    String mood;
 
-    public AddUser(String email, String username, String tag, String about, String imageURL, String id, String search, String status) {
+    public String getMood() {
+        return mood;
+    }
+
+    public void setMood(String mood) {
+        this.mood = mood;
+    }
+
+    public AddUser(String email, String username, String tag, String about, String imageURL, String id, String search, String status,String mood) {
         this.email = email;
         this.username = username;
         this.tag = tag;
@@ -16,6 +25,7 @@ public class AddUser {
         this.search = search;
         this.status = status;
         this.connections = 0;
+        this.mood = mood;
     }
 
     public String getImageURL() {

@@ -175,7 +175,7 @@ public class Register extends AppCompatActivity {
 
     public void addUser()
     {
-        AddUser newuser = new AddUser(email, username, tag_value,"",default_image_url,userid,username.toLowerCase(),"offline");
+        AddUser newuser = new AddUser(email, username, tag_value,"",default_image_url,userid,username.toLowerCase(),"offline","normal");
         reference.child("Users").child(userid).setValue(newuser);
     }
 }

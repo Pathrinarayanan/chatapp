@@ -29,6 +29,6 @@
         android:id="@+id/angry"
         android:title="ANGRY"/>
     <item
-        android:id="@+id/normalmood"
+        android:id="@+id/normal"
         android:title="NORMAL"/>
 </menu>

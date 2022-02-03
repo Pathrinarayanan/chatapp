@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,7 +55,7 @@ public class Profile extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         auth = FirebaseAuth.getInstance();
-
+       ImageView prev = findViewById(R.id.btnPrev);
         imgProfile = findViewById(R.id.imgProfile);
         btnEdit = findViewById(R.id.btnEdit);
         txtUsername = findViewById(R.id.txtUsername);
@@ -125,7 +126,13 @@ public class Profile extends AppCompatActivity {
 
             }
         });
-
+        prev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Profile.this, com.example.chatapp.MainActivity.class));
+                finish();
+            }
+        });
 
         btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override

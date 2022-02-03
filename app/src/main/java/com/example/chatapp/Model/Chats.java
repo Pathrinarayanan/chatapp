@@ -2,15 +2,23 @@ package com.example.chatapp.Model;
 
 public class Chats {
 
-    String sender, reciever, message;
+    String sender, reciever, message,mood;
     boolean isseen;
 
+    public String getMood() {
+        return mood;
+    }
 
-    public Chats(String sender, String reciever, String message, boolean isseen) {
+    public void setMood(String mood) {
+        this.mood = mood;
+    }
+
+    public Chats(String sender, String reciever, String message, boolean isseen , String mood) {
         this.sender = sender;
         this.reciever = reciever;
         this.message = message;
         this.isseen = isseen;
+        this.mood = mood;
     }
 
 

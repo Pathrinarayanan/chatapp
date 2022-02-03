@@ -25,10 +25,12 @@
 
             android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar">
 
+
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_image_toolbar_message"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
+                android:layout_marginLeft="5dp"
                 android:src="@drawable/settings_profile"
                 app:civ_border_width="2dp"
                 app:civ_border_color="#FF000000"

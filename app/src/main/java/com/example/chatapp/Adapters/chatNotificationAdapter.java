@@ -148,6 +148,15 @@ public class chatNotificationAdapter extends RecyclerView.Adapter<chatNotificati
                 }
             }
         });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mContext.startActivity(new Intent(mContext,com.example.chatapp.friendprofile.class));
+
+            }
+        });
+
         if(user.getStatus().equals("pending")){
             current_states ="he_sent_pending";
         }

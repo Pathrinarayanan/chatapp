@@ -17,7 +17,8 @@
         <activity
             android:name=".messageActivity"
             android:exported="true"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+             />
         <activity
             android:name=".splashs"
             android:exported="true"
